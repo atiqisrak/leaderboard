@@ -8,6 +8,8 @@ import feedRoutes from './routes/feedRoutes';
 import commentRoutes from './routes/commentRoutes';
 import feedReactionRoutes from './routes/feedReactionRoutes';
 import commentReactionRoutes from './routes/commentReactionRoutes';
+import feedMentionRoutes from './routes/feedMentionRoutes';
+import commentMentionRoutes from './routes/commentMentionRoutes';
 
 const app = express();
 
@@ -32,7 +34,8 @@ app.use(`${config.api.prefix}/feeds`, feedRoutes);
 app.use(`${config.api.prefix}/comments`, commentRoutes);
 app.use(`${config.api.prefix}/feed-reactions`, feedReactionRoutes);
 app.use(`${config.api.prefix}/comment-reactions`, commentReactionRoutes);
-
+app.use(`${config.api.prefix}/feed-mentions`, feedMentionRoutes);
+app.use(`${config.api.prefix}/comment-mentions`, commentMentionRoutes);
 
 // Health check
 app.get('/health', (req, res) => {
