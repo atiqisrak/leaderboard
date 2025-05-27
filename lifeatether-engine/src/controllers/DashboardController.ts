@@ -8,6 +8,34 @@ export class DashboardController {
     this.dashboardService = new DashboardService();
   }
 
+  renderDashboard = async (req: Request, res: Response) => {
+    try {
+      const [
+        overallMetrics,
+        topUsers,
+        topFeeds,
+        activityTrends,
+        contentInsights
+      ] = await Promise.all([
+        this.dashboardService.getOverallMetrics(),
+        this.dashboardService.getTopUsers(5),
+        this.dashboardService.getTopFeeds(5),
+        this.dashboardService.getActivityTrends(7),
+        this.dashboardService.getContentInsights()
+      ]);
+
+      res.render('dashboard', {
+        overallMetrics,
+        topUsers,
+        topFeeds,
+        activityTrends,
+        contentInsights
+      });
+    } catch (error: any) {
+      res.status(500).render('error', { error: error.message });
+    }
+  };
+
   getOverallMetrics = async (req: Request, res: Response) => {
     try {
       const metrics = await this.dashboardService.getOverallMetrics();
