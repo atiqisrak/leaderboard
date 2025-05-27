@@ -1,6 +1,4 @@
 import Feed from '../models/Feed';
-import User from '../models/User';
-import Comment from '../models/Comment';
 import { Op } from 'sequelize';
 
 export class FeedService {
@@ -14,14 +12,20 @@ export class FeedService {
 
   async findById(id: number) {
     return Feed.findByPk(id, {
-      include: [
-        { model: User, as: 'author' },
-        {
-          model: Comment,
-          as: 'comments',
-          include: [{ model: User, as: 'user' }]
-        }
-      ]
+      include: [{
+        association: 'author',
+        attributes: { exclude: ['password'] }
+      }]
+    });
+  }
+
+  async findAll() {
+    return Feed.findAll({
+      include: [{
+        association: 'author',
+        attributes: { exclude: ['password'] }
+      }],
+      order: [['created_at', 'DESC']]
     });
   }
 
@@ -37,16 +41,6 @@ export class FeedService {
     return feed.destroy();
   }
 
-  async listFeeds(page = 1, limit = 10) {
-    const offset = (page - 1) * limit;
-    return Feed.findAndCountAll({
-      include: [{ model: User, as: 'author' }],
-      order: [['created_at', 'DESC']],
-      limit,
-      offset
-    });
-  }
-
   async searchFeeds(query: string) {
     return Feed.findAll({
       where: {
@@ -55,7 +49,22 @@ export class FeedService {
           { content: { [Op.iLike]: `%${query}%` } }
         ]
       },
-      include: [{ model: User, as: 'author' }]
+      include: [{
+        association: 'author',
+        attributes: { exclude: ['password'] }
+      }],
+      order: [['created_at', 'DESC']]
+    });
+  }
+
+  async findByAuthor(authorId: number) {
+    return Feed.findAll({
+      where: { author_id: authorId },
+      include: [{
+        association: 'author',
+        attributes: { exclude: ['password'] }
+      }],
+      order: [['created_at', 'DESC']]
     });
   }
 } 

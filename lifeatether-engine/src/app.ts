@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import { config } from './config/config';
 import sequelize from './config/database';
 import userRoutes from './routes/userRoutes';
+import feedRoutes from './routes/feedRoutes';
 
 const app = express();
 
@@ -24,6 +25,7 @@ sequelize.authenticate()
 
 // API Routes
 app.use(`${config.api.prefix}/users`, userRoutes);
+app.use(`${config.api.prefix}/feeds`, feedRoutes);
 
 // Health check
 app.get('/health', (req, res) => {
