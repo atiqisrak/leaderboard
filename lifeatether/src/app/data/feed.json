@@ -1,0 +1,49 @@
+[
+  {
+    "id": 1,
+    "title": "EtherTech's 10th Anniversary Celebration",
+    "content": "Join us for a day of fun, games, and team bonding! We'll be celebrating our 10th anniversary with a day of activities and games. We'll be having a cake cutting ceremony, a game of tug of war, and a game of charades.",
+    "createdAt": "2021-01-01",
+    "authorId": 1,
+    "reactions": [],
+    "comments": []
+  },
+  {
+    "id": 2,
+    "title": "EtherTech's 9th Anniversary Celebration",
+    "content": "Join us for a day of fun, games, and team bonding! We'll be celebrating our 9th anniversary with a day of activities and games. We'll be having a cake cutting ceremony, a game of tug of war, and a game of charades.",
+    "createdAt": "2020-01-01",
+    "authorId": 2,
+    "reactions": [],
+    "comments": []
+  },
+  {
+    "title": "Hi Ether",
+    "content": "Welcome everyone to Ether",
+    "authorId": 1,
+    "id": 3,
+    "createdAt": "2025-05-27T07:09:25.809Z",
+    "reactions": [
+      {
+        "id": "1748332469030",
+        "type": "laugh",
+        "userId": 1,
+        "createdAt": "2025-05-27T07:54:29.030Z"
+      }
+    ],
+    "comments": [
+      {
+        "id": "1748332465511",
+        "content": "Things are going good",
+        "userId": 1,
+        "createdAt": "2025-05-27T07:54:25.511Z"
+      },
+      {
+        "id": "1748332478687",
+        "content": "Love it",
+        "userId": 1,
+        "createdAt": "2025-05-27T07:54:38.687Z"
+      }
+    ]
+  }
+]
