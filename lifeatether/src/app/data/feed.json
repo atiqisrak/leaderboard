@@ -4,9 +4,7 @@
     "title": "EtherTech's 10th Anniversary Celebration",
     "content": "Join us for a day of fun, games, and team bonding! We'll be celebrating our 10th anniversary with a day of activities and games. We'll be having a cake cutting ceremony, a game of tug of war, and a game of charades.",
     "createdAt": "2021-01-01",
-    "authorId": 1,
-    "reactions": [],
-    "comments": []
+    "authorId": 1
   },
   {
     "id": 2,

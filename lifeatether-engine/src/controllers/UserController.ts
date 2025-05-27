@@ -1,0 +1,80 @@
+import { Request, Response } from 'express';
+import { UserService } from '../services/UserService';
+import jwt, { SignOptions, Secret } from 'jsonwebtoken';
+import { config } from '../config/config';
+
+export class UserController {
+  private userService: UserService;
+
+  constructor() {
+    this.userService = new UserService();
+  }
+
+  register = async (req: Request, res: Response) => {
+    try {
+      const user = await this.userService.createUser(req.body);
+      const options: SignOptions = { expiresIn: config.jwt.expiresIn as jwt.SignOptions['expiresIn'] };
+      const token = jwt.sign({ id: user.id }, config.jwt.secret as Secret, options);
+      res.status(201).json({ user, token });
+    } catch (error: any) {
+      res.status(400).json({ error: error.message });
+    }
+  };
+
+  login = async (req: Request, res: Response) => {
+    try {
+      const { email, password } = req.body;
+      const user = await this.userService.findByEmail(email);
+      
+      if (!user || !(await user.comparePassword(password))) {
+        res.status(401).json({ error: 'Invalid credentials' });
+        return;
+      }
+
+      const options: SignOptions = { expiresIn: config.jwt.expiresIn as jwt.SignOptions['expiresIn'] };
+      const token = jwt.sign({ id: user.id }, config.jwt.secret as Secret, options);
+      res.json({ user, token });
+    } catch (error: any) {
+      res.status(400).json({ error: error.message });
+    }
+  };
+
+  getProfile = async (req: Request, res: Response) => {
+    try {
+      if (!req.user?.id) {
+        res.status(401).json({ error: 'Unauthorized' });
+        return;
+      }
+      const user = await this.userService.findById(Number(req.user.id));
+      if (!user) {
+        res.status(404).json({ error: 'User not found' });
+        return;
+      }
+      res.json(user);
+    } catch (error: any) {
+      res.status(400).json({ error: error.message });
+    }
+  };
+
+  updateProfile = async (req: Request, res: Response) => {
+    try {
+      if (!req.user?.id) {
+        res.status(401).json({ error: 'Unauthorized' });
+        return;
+      }
+      const user = await this.userService.updateUser(Number(req.user.id), req.body);
+      res.json(user);
+    } catch (error: any) {
+      res.status(400).json({ error: error.message });
+    }
+  };
+
+  searchUsers = async (req: Request, res: Response) => {
+    try {
+      const users = await this.userService.searchUsers(req.query.q as string);
+      res.json(users);
+    } catch (error: any) {
+      res.status(400).json({ error: error.message });
+    }
+  };
+} 
