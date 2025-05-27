@@ -6,6 +6,8 @@ import sequelize from './config/database';
 import userRoutes from './routes/userRoutes';
 import feedRoutes from './routes/feedRoutes';
 import commentRoutes from './routes/commentRoutes';
+import feedReactionRoutes from './routes/feedReactionRoutes';
+import commentReactionRoutes from './routes/commentReactionRoutes';
 
 const app = express();
 
@@ -28,6 +30,9 @@ sequelize.authenticate()
 app.use(`${config.api.prefix}/users`, userRoutes);
 app.use(`${config.api.prefix}/feeds`, feedRoutes);
 app.use(`${config.api.prefix}/comments`, commentRoutes);
+app.use(`${config.api.prefix}/feed-reactions`, feedReactionRoutes);
+app.use(`${config.api.prefix}/comment-reactions`, commentReactionRoutes);
+
 
 // Health check
 app.get('/health', (req, res) => {
