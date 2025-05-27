@@ -5,6 +5,18 @@ import { useRouter } from "next/navigation";
 
 const AuthContext = createContext(null);
 
+// Helper function to get safe user data for storage
+const getSafeUserData = (user) => {
+  if (!user) return null;
+  return {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    avatar: user.avatar,
+  };
+};
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -18,13 +30,18 @@ export function AuthProvider({ children }) {
         if (response.ok) {
           const data = await response.json();
           setUser(data.user);
-          // Store user in localStorage
-          localStorage.setItem("user", JSON.stringify(data.user));
+          // Store only safe user data in localStorage
+          localStorage.setItem(
+            "user",
+            JSON.stringify(getSafeUserData(data.user))
+          );
         } else {
           // If cookie auth fails, try localStorage
           const storedUser = localStorage.getItem("user");
           if (storedUser) {
             setUser(JSON.parse(storedUser));
+          } else {
+            setUser(null);
           }
         }
       } catch (error) {
@@ -33,6 +50,8 @@ export function AuthProvider({ children }) {
         const storedUser = localStorage.getItem("user");
         if (storedUser) {
           setUser(JSON.parse(storedUser));
+        } else {
+          setUser(null);
         }
       } finally {
         setLoading(false);
@@ -56,8 +75,11 @@ export function AuthProvider({ children }) {
 
       if (data.success) {
         setUser(data.user);
-        // Store user in localStorage
-        localStorage.setItem("user", JSON.stringify(data.user));
+        // Store only safe user data in localStorage
+        localStorage.setItem(
+          "user",
+          JSON.stringify(getSafeUserData(data.user))
+        );
         router.push("/");
         return true;
       }
@@ -74,7 +96,6 @@ export function AuthProvider({ children }) {
         method: "DELETE",
       });
       setUser(null);
-      // Clear user from localStorage
       localStorage.removeItem("user");
       router.push("/");
     } catch (error) {

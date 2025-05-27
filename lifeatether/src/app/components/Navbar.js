@@ -8,6 +8,11 @@ import { useRouter } from "next/navigation";
 export default function Navbar() {
   const { user, logout } = useAuth();
   const router = useRouter();
+
+  const handleLogin = () => {
+    router.push("/auth/login");
+  };
+
   return (
     <nav className="fixed top-0 left-0 right-0 bg-[#23262b] z-50 py-4 shadow-lg">
       <div className="max-w-3xl mx-auto px-6 flex justify-between items-center">
@@ -55,12 +60,12 @@ export default function Navbar() {
               Logout
             </button>
           ) : (
-            <Link
-              href="/auth/login"
+            <button
+              onClick={handleLogin}
               className="bg-[#FCB813] text-[#181b20] px-4 py-2 rounded-lg font-semibold hover:bg-[#ffd34d] transition-colors"
             >
               Login
-            </Link>
+            </button>
           )}
         </div>
       </div>

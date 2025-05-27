@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 export function middleware(request) {
-  const user = request.cookies.get("user");
+  const accessToken = request.cookies.get("access_token");
   const isAuthPage = request.nextUrl.pathname.startsWith("/auth");
   const isApiRoute = request.nextUrl.pathname.startsWith("/api");
   const isPublicRoute =
@@ -15,7 +15,7 @@ export function middleware(request) {
       request.nextUrl.pathname.includes("/comments") ||
       (request.nextUrl.pathname === "/api/feed" && request.method === "POST")
     ) {
-      if (!user) {
+      if (!accessToken) {
         return NextResponse.json(
           { success: false, message: "Authentication required" },
           { status: 401 }
@@ -31,12 +31,12 @@ export function middleware(request) {
   }
 
   // Redirect to login if accessing protected routes without authentication
-  if (!user && !isAuthPage) {
+  if (!accessToken && !isAuthPage) {
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
 
   // Redirect to home if accessing auth pages while authenticated
-  if (user && isAuthPage) {
+  if (accessToken && isAuthPage) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 

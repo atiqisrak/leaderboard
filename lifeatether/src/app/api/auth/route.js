@@ -1,49 +1,41 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
+import { cookies } from "next/headers";
 
-const dataDirectory = path.join(process.cwd(), "src/app/data");
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 export async function POST(request) {
   try {
     const { email, password } = await request.json();
 
-    // Read users from JSON file
-    const filePath = path.join(dataDirectory, "users.json");
-    const fileContents = fs.readFileSync(filePath, "utf8");
-    const users = JSON.parse(fileContents);
+    const response = await fetch(`${BASE_URL}/users/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
 
-    // Find user
-    const user = users.find(
-      (u) => u.email === email && u.password === password
-    );
+    const data = await response.json();
 
-    if (user) {
-      // Remove password from user object
-      const { password: _, ...userWithoutPassword } = user;
-
-      // Set HTTP-only cookie
-      const response = NextResponse.json(
-        { success: true, user: userWithoutPassword },
-        { status: 200 }
+    if (!response.ok) {
+      return NextResponse.json(
+        { success: false, message: data.message || "Login failed" },
+        { status: response.status }
       );
-
-      // Set cookie with user data
-      response.cookies.set("user", JSON.stringify(userWithoutPassword), {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        path: "/",
-        maxAge: 60 * 60 * 24 * 7, // 1 week
-      });
-
-      return response;
     }
 
-    return NextResponse.json(
-      { success: false, message: "Invalid credentials" },
-      { status: 401 }
-    );
+    // Store user data in a cookie
+    cookies().set("user", JSON.stringify(data.user), {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60, // 7 days
+    });
+
+    return NextResponse.json({
+      success: true,
+      user: data.user,
+    });
   } catch (error) {
     console.error("Login error:", error);
     return NextResponse.json(
@@ -54,10 +46,16 @@ export async function POST(request) {
 }
 
 export async function DELETE() {
-  const response = NextResponse.json({ success: true }, { status: 200 });
+  try {
+    // Clear the user cookie
+    cookies().delete("user");
 
-  // Clear the user cookie
-  response.cookies.delete("user");
-
-  return response;
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Logout error:", error);
+    return NextResponse.json(
+      { success: false, message: "Internal server error" },
+      { status: 500 }
+    );
+  }
 }
