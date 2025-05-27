@@ -11,16 +11,29 @@ export function AuthProvider({ children }) {
   const router = useRouter();
 
   useEffect(() => {
-    // Check if user is logged in via cookie
+    // Check if user is logged in via cookie and localStorage
     const checkAuth = async () => {
       try {
         const response = await fetch("/api/auth/check");
         if (response.ok) {
           const data = await response.json();
           setUser(data.user);
+          // Store user in localStorage
+          localStorage.setItem("user", JSON.stringify(data.user));
+        } else {
+          // If cookie auth fails, try localStorage
+          const storedUser = localStorage.getItem("user");
+          if (storedUser) {
+            setUser(JSON.parse(storedUser));
+          }
         }
       } catch (error) {
         console.error("Auth check error:", error);
+        // If API call fails, try localStorage
+        const storedUser = localStorage.getItem("user");
+        if (storedUser) {
+          setUser(JSON.parse(storedUser));
+        }
       } finally {
         setLoading(false);
       }
@@ -43,6 +56,8 @@ export function AuthProvider({ children }) {
 
       if (data.success) {
         setUser(data.user);
+        // Store user in localStorage
+        localStorage.setItem("user", JSON.stringify(data.user));
         router.push("/");
         return true;
       }
@@ -59,6 +74,8 @@ export function AuthProvider({ children }) {
         method: "DELETE",
       });
       setUser(null);
+      // Clear user from localStorage
+      localStorage.removeItem("user");
       router.push("/");
     } catch (error) {
       console.error("Logout error:", error);
