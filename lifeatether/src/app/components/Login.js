@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import Image from "next/image";
 
-export default function Login() {
+export default function Login({ isModal = true }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -19,9 +20,21 @@ export default function Login() {
     }
   };
 
+  const containerClasses = isModal
+    ? "fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+    : "min-h-screen bg-[#181b20] flex items-center justify-center p-4";
+
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div className={containerClasses}>
       <div className="bg-[#23262b] p-8 rounded-2xl w-full max-w-md">
+        <Image
+          src="/logo.svg"
+          alt="EtherTech Logo"
+          width={120}
+          height={40}
+          className="object-contain"
+          priority
+        />
         <h2 className="text-2xl font-bold mb-6 text-[#FCB813]">
           Login to EtherTech
         </h2>
