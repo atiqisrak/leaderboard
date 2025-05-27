@@ -29,7 +29,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "users",
                                 "register"
                             ]
@@ -57,7 +56,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "users",
                                 "login"
                             ]
@@ -81,7 +79,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "users",
                                 "profile"
                             ]
@@ -113,7 +110,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "users",
                                 "profile"
                             ]
@@ -137,7 +133,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "users",
                                 "search"
                             ],
@@ -167,7 +162,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "feeds"
                             ]
                         },
@@ -184,7 +178,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "feeds",
                                 "search"
                             ],
@@ -208,7 +201,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "feeds",
                                 "author",
                                 "123"
@@ -227,7 +219,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "feeds",
                                 "123"
                             ]
@@ -259,7 +250,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "feeds"
                             ]
                         },
@@ -290,7 +280,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "feeds",
                                 "123"
                             ]
@@ -314,7 +303,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "feeds",
                                 "123"
                             ]
@@ -338,7 +326,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "feed-reactions",
                                 "feed",
                                 "123"
@@ -357,7 +344,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "feed-reactions",
                                 "user",
                                 "123"
@@ -376,7 +362,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "feed-reactions",
                                 "feed",
                                 "123",
@@ -410,7 +395,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "feed-reactions"
                             ]
                         },
@@ -433,7 +417,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "feed-reactions",
                                 "123",
                                 "like"
@@ -458,7 +441,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "feed-mentions",
                                 "feed",
                                 "123"
@@ -477,7 +459,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "feed-mentions",
                                 "user",
                                 "123"
@@ -496,7 +477,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "feed-mentions",
                                 "feed",
                                 "123",
@@ -530,7 +510,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "feed-mentions"
                             ]
                         },
@@ -553,7 +532,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "feed-mentions",
                                 "123",
                                 "456"
@@ -578,7 +556,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "comments",
                                 "feed",
                                 "123"
@@ -597,7 +574,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "comments",
                                 "user",
                                 "123"
@@ -616,7 +592,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "comments",
                                 "search"
                             ],
@@ -640,7 +615,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "comments",
                                 "123"
                             ]
@@ -672,7 +646,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "comments"
                             ]
                         },
@@ -703,7 +676,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "comments",
                                 "123"
                             ]
@@ -727,7 +699,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "comments",
                                 "123"
                             ]
@@ -751,7 +722,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "comment-reactions",
                                 "comment",
                                 "123"
@@ -770,7 +740,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "comment-reactions",
                                 "user",
                                 "123"
@@ -789,7 +758,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "comment-reactions",
                                 "comment",
                                 "123",
@@ -823,7 +791,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "comment-reactions"
                             ]
                         },
@@ -846,7 +813,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "comment-reactions",
                                 "123",
                                 "like"
@@ -871,7 +837,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "comment-mentions",
                                 "comment",
                                 "123"
@@ -890,7 +855,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "comment-mentions",
                                 "user",
                                 "123"
@@ -909,7 +873,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "comment-mentions",
                                 "comment",
                                 "123",
@@ -943,7 +906,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "comment-mentions"
                             ]
                         },
@@ -966,7 +928,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "comment-mentions",
                                 "123",
                                 "456"
@@ -997,7 +958,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "dashboard",
                                 "metrics"
                             ]
@@ -1021,7 +981,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "dashboard",
                                 "top-users"
                             ]
@@ -1045,7 +1004,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "dashboard",
                                 "top-feeds"
                             ]
@@ -1069,7 +1027,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "dashboard",
                                 "activity-trends"
                             ]
@@ -1093,7 +1050,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "dashboard",
                                 "user",
                                 "123",
@@ -1119,7 +1075,6 @@
                                 "{{base_url}}"
                             ],
                             "path": [
-                                "api",
                                 "dashboard",
                                 "content-insights"
                             ]
@@ -1133,7 +1088,7 @@
     "variable": [
         {
             "key": "base_url",
-            "value": "http://188.166.232.67:3098",
+            "value": "http://188.166.232.67:3098/api/v1",
             "type": "string"
         },
         {
