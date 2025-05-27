@@ -102,6 +102,12 @@
         "type": "like",
         "userId": 3,
         "createdAt": "2025-05-27T09:35:05.144Z"
+      },
+      {
+        "id": "1748339931890",
+        "type": "love",
+        "userId": 12,
+        "createdAt": "2025-05-27T09:58:51.890Z"
       }
     ],
     "comments": [
@@ -122,6 +128,12 @@
         "content": "tk bad a ja support caw ami dissi",
         "userId": 3,
         "createdAt": "2025-05-27T09:34:05.374Z"
+      },
+      {
+        "id": "1748338676206",
+        "content": "tkr support to ami dissi advance chara production hoea gese... baki delivery por dekha jabe.",
+        "userId": 12,
+        "createdAt": "2025-05-27T09:37:56.206Z"
       }
     ]
   }

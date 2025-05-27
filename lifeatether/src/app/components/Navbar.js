@@ -3,14 +3,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useAuth } from "../context/AuthContext";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
   const { user, logout } = useAuth();
-
+  const router = useRouter();
   return (
     <nav className="fixed top-0 left-0 right-0 bg-[#23262b] z-50 py-4 shadow-lg">
       <div className="max-w-3xl mx-auto px-6 flex justify-between items-center">
-        <div className="logo">
+        <div className="logo cursor-pointer" onClick={() => router.push("/")}>
           <Image
             src="/logo.svg"
             alt="EtherTech Logo"
