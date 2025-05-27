@@ -89,8 +89,8 @@
     },
     {
         "id": 12,
-        "name": "Tonmoy",
-        "email": "tonmoy@ethertech.ltd",
+        "name": "Tanmoy",
+        "email": "tanmoy@ethertech.ltd",
         "role": "user",
         "password": "123123",
         "avatar": "/avatars/12.png"

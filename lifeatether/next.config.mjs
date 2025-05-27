@@ -2,6 +2,9 @@
 const nextConfig = {
   images: {
     domains: ["randomuser.me"],
+    dangerouslyAllowSVG: true,
+    contentDispositionType: "attachment",
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
 };
 

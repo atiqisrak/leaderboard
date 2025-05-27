@@ -27,17 +27,17 @@ export default function Login({ isModal = true }) {
   return (
     <div className={containerClasses}>
       <div className="bg-[#23262b] p-8 rounded-2xl w-full max-w-md">
-        <Image
-          src="/logo.svg"
-          alt="EtherTech Logo"
-          width={120}
-          height={40}
-          className="object-contain"
-          priority
-        />
-        <h2 className="text-2xl font-bold mb-6 text-[#FCB813]">
-          Login to EtherTech
-        </h2>
+        <div className="flex justify-center mb-6 items-center gap-2">
+          <h1 className="text-2xl font-bold text-white">Life at</h1>
+          <Image
+            src="/logo.svg"
+            alt="EtherTech Logo"
+            width={120}
+            height={40}
+            className="object-contain"
+            priority
+          />
+        </div>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label

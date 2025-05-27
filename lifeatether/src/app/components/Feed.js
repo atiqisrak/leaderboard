@@ -310,11 +310,14 @@ export default function Feed() {
                     className="bg-[#181b20] rounded-lg p-3 mb-2"
                   >
                     <div className="flex items-center mb-2">
-                      <img
-                        src={getUserInfo(comment.userId).avatar}
-                        alt={getUserInfo(comment.userId).name}
-                        className="w-6 h-6 rounded-full mr-2"
-                      />
+                      <div className="relative w-6 h-6 mr-2">
+                        <Image
+                          src={getUserInfo(comment.userId).avatar}
+                          alt={getUserInfo(comment.userId).name}
+                          fill
+                          className="rounded-full object-cover"
+                        />
+                      </div>
                       <span className="font-medium text-[#FCB813]">
                         {getUserInfo(comment.userId).name}
                       </span>
