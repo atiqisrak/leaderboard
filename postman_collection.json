@@ -1,0 +1,1145 @@
+{
+    "info": {
+        "name": "Life at Ether - Office Social Media API",
+        "description": "A comprehensive API collection for Life at Ether's office social media platform. This platform enables employees to share updates, engage with content, and interact with colleagues through feeds, comments, reactions, and mentions.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Authentication",
+            "description": "User authentication and profile management endpoints",
+            "item": [
+                {
+                    "name": "Register User",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john.doe@example.com\",\n    \"password\": \"securepassword123\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/users/register",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "users",
+                                "register"
+                            ]
+                        },
+                        "description": "Register a new user in the system. Requires name, email, and password."
+                    }
+                },
+                {
+                    "name": "Login User",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"john.doe@example.com\",\n    \"password\": \"securepassword123\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/users/login",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "users",
+                                "login"
+                            ]
+                        },
+                        "description": "Authenticate a user and receive an access token."
+                    }
+                },
+                {
+                    "name": "Get User Profile",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/users/profile",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "users",
+                                "profile"
+                            ]
+                        },
+                        "description": "Get the authenticated user's profile information."
+                    }
+                },
+                {
+                    "name": "Update User Profile",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"John Doe Updated\",\n    \"bio\": \"Software Engineer at Ether\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/users/profile",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "users",
+                                "profile"
+                            ]
+                        },
+                        "description": "Update the authenticated user's profile information."
+                    }
+                },
+                {
+                    "name": "Search Users",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/users/search?query=john",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "users",
+                                "search"
+                            ],
+                            "query": [
+                                {
+                                    "key": "query",
+                                    "value": "john"
+                                }
+                            ]
+                        },
+                        "description": "Search for users by name or email."
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Feeds",
+            "description": "Feed management and interaction endpoints",
+            "item": [
+                {
+                    "name": "Get All Feeds",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/api/feeds",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "feeds"
+                            ]
+                        },
+                        "description": "Get a list of all public feeds."
+                    }
+                },
+                {
+                    "name": "Search Feeds",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/api/feeds/search?query=project",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "feeds",
+                                "search"
+                            ],
+                            "query": [
+                                {
+                                    "key": "query",
+                                    "value": "project"
+                                }
+                            ]
+                        },
+                        "description": "Search for feeds by title or content."
+                    }
+                },
+                {
+                    "name": "Get Feeds by Author",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/api/feeds/author/123",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "feeds",
+                                "author",
+                                "123"
+                            ]
+                        },
+                        "description": "Get all feeds created by a specific user."
+                    }
+                },
+                {
+                    "name": "Get Feed by ID",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/api/feeds/123",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "feeds",
+                                "123"
+                            ]
+                        },
+                        "description": "Get detailed information about a specific feed."
+                    }
+                },
+                {
+                    "name": "Create Feed",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"New Project Launch\",\n    \"content\": \"We're excited to announce the launch of our new project!\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/feeds",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "feeds"
+                            ]
+                        },
+                        "description": "Create a new feed post. Requires authentication."
+                    }
+                },
+                {
+                    "name": "Update Feed",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Updated Project Launch\",\n    \"content\": \"We're excited to announce the launch of our new project with additional features!\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/feeds/123",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "feeds",
+                                "123"
+                            ]
+                        },
+                        "description": "Update an existing feed post. Requires authentication and ownership."
+                    }
+                },
+                {
+                    "name": "Delete Feed",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/feeds/123",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "feeds",
+                                "123"
+                            ]
+                        },
+                        "description": "Delete a feed post. Requires authentication and ownership."
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Feed Reactions",
+            "description": "Endpoints for managing reactions on feeds",
+            "item": [
+                {
+                    "name": "Get Feed Reactions",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/api/feed-reactions/feed/123",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "feed-reactions",
+                                "feed",
+                                "123"
+                            ]
+                        },
+                        "description": "Get all reactions for a specific feed."
+                    }
+                },
+                {
+                    "name": "Get User Reactions",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/api/feed-reactions/user/123",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "feed-reactions",
+                                "user",
+                                "123"
+                            ]
+                        },
+                        "description": "Get all reactions made by a specific user."
+                    }
+                },
+                {
+                    "name": "Get Reaction Counts",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/api/feed-reactions/feed/123/counts",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "feed-reactions",
+                                "feed",
+                                "123",
+                                "counts"
+                            ]
+                        },
+                        "description": "Get the count of each reaction type for a specific feed."
+                    }
+                },
+                {
+                    "name": "Add Reaction",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"feed_id\": 123,\n    \"reaction_type\": \"like\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/feed-reactions",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "feed-reactions"
+                            ]
+                        },
+                        "description": "Add a reaction to a feed. Requires authentication."
+                    }
+                },
+                {
+                    "name": "Remove Reaction",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/feed-reactions/123/like",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "feed-reactions",
+                                "123",
+                                "like"
+                            ]
+                        },
+                        "description": "Remove a reaction from a feed. Requires authentication."
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Feed Mentions",
+            "description": "Endpoints for managing user mentions in feeds",
+            "item": [
+                {
+                    "name": "Get Feed Mentions",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/api/feed-mentions/feed/123",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "feed-mentions",
+                                "feed",
+                                "123"
+                            ]
+                        },
+                        "description": "Get all user mentions in a specific feed."
+                    }
+                },
+                {
+                    "name": "Get User Mentions",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/api/feed-mentions/user/123",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "feed-mentions",
+                                "user",
+                                "123"
+                            ]
+                        },
+                        "description": "Get all mentions of a specific user across feeds."
+                    }
+                },
+                {
+                    "name": "Get Mention Count",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/api/feed-mentions/feed/123/count",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "feed-mentions",
+                                "feed",
+                                "123",
+                                "count"
+                            ]
+                        },
+                        "description": "Get the total number of mentions in a specific feed."
+                    }
+                },
+                {
+                    "name": "Add Mention",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"feed_id\": 123,\n    \"mentioned_user_id\": 456\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/feed-mentions",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "feed-mentions"
+                            ]
+                        },
+                        "description": "Add a user mention to a feed. Requires authentication."
+                    }
+                },
+                {
+                    "name": "Remove Mention",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/feed-mentions/123/456",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "feed-mentions",
+                                "123",
+                                "456"
+                            ]
+                        },
+                        "description": "Remove a user mention from a feed. Requires authentication."
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Comments",
+            "description": "Endpoints for managing comments on feeds",
+            "item": [
+                {
+                    "name": "Get Feed Comments",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/api/comments/feed/123",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "comments",
+                                "feed",
+                                "123"
+                            ]
+                        },
+                        "description": "Get all comments for a specific feed."
+                    }
+                },
+                {
+                    "name": "Get User Comments",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/api/comments/user/123",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "comments",
+                                "user",
+                                "123"
+                            ]
+                        },
+                        "description": "Get all comments made by a specific user."
+                    }
+                },
+                {
+                    "name": "Search Comments",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/api/comments/search?query=great",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "comments",
+                                "search"
+                            ],
+                            "query": [
+                                {
+                                    "key": "query",
+                                    "value": "great"
+                                }
+                            ]
+                        },
+                        "description": "Search for comments by content."
+                    }
+                },
+                {
+                    "name": "Get Comment",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/api/comments/123",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "comments",
+                                "123"
+                            ]
+                        },
+                        "description": "Get detailed information about a specific comment."
+                    }
+                },
+                {
+                    "name": "Create Comment",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"content\": \"Great work on the project!\",\n    \"feed_id\": 123,\n    \"parent_comment_id\": null\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/comments",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "comments"
+                            ]
+                        },
+                        "description": "Create a new comment on a feed. Requires authentication."
+                    }
+                },
+                {
+                    "name": "Update Comment",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"content\": \"Updated comment content\",\n    \"feed_id\": 123\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/comments/123",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "comments",
+                                "123"
+                            ]
+                        },
+                        "description": "Update an existing comment. Requires authentication and ownership."
+                    }
+                },
+                {
+                    "name": "Delete Comment",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/comments/123",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "comments",
+                                "123"
+                            ]
+                        },
+                        "description": "Delete a comment. Requires authentication and ownership."
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Comment Reactions",
+            "description": "Endpoints for managing reactions on comments",
+            "item": [
+                {
+                    "name": "Get Comment Reactions",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/api/comment-reactions/comment/123",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "comment-reactions",
+                                "comment",
+                                "123"
+                            ]
+                        },
+                        "description": "Get all reactions for a specific comment."
+                    }
+                },
+                {
+                    "name": "Get User Reactions",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/api/comment-reactions/user/123",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "comment-reactions",
+                                "user",
+                                "123"
+                            ]
+                        },
+                        "description": "Get all reactions made by a specific user on comments."
+                    }
+                },
+                {
+                    "name": "Get Reaction Counts",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/api/comment-reactions/comment/123/counts",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "comment-reactions",
+                                "comment",
+                                "123",
+                                "counts"
+                            ]
+                        },
+                        "description": "Get the count of each reaction type for a specific comment."
+                    }
+                },
+                {
+                    "name": "Add Reaction",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"comment_id\": 123,\n    \"reaction_type\": \"like\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/comment-reactions",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "comment-reactions"
+                            ]
+                        },
+                        "description": "Add a reaction to a comment. Requires authentication."
+                    }
+                },
+                {
+                    "name": "Remove Reaction",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/comment-reactions/123/like",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "comment-reactions",
+                                "123",
+                                "like"
+                            ]
+                        },
+                        "description": "Remove a reaction from a comment. Requires authentication."
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Comment Mentions",
+            "description": "Endpoints for managing user mentions in comments",
+            "item": [
+                {
+                    "name": "Get Comment Mentions",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/api/comment-mentions/comment/123",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "comment-mentions",
+                                "comment",
+                                "123"
+                            ]
+                        },
+                        "description": "Get all user mentions in a specific comment."
+                    }
+                },
+                {
+                    "name": "Get User Mentions",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/api/comment-mentions/user/123",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "comment-mentions",
+                                "user",
+                                "123"
+                            ]
+                        },
+                        "description": "Get all mentions of a specific user in comments."
+                    }
+                },
+                {
+                    "name": "Get Mention Count",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/api/comment-mentions/comment/123/count",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "comment-mentions",
+                                "comment",
+                                "123",
+                                "count"
+                            ]
+                        },
+                        "description": "Get the total number of mentions in a specific comment."
+                    }
+                },
+                {
+                    "name": "Add Mention",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"comment_id\": 123,\n    \"mentioned_user_id\": 456\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/comment-mentions",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "comment-mentions"
+                            ]
+                        },
+                        "description": "Add a user mention to a comment. Requires authentication."
+                    }
+                },
+                {
+                    "name": "Remove Mention",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/comment-mentions/123/456",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "comment-mentions",
+                                "123",
+                                "456"
+                            ]
+                        },
+                        "description": "Remove a user mention from a comment. Requires authentication."
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Dashboard",
+            "description": "Endpoints for accessing dashboard metrics and insights",
+            "item": [
+                {
+                    "name": "Get Overall Metrics",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/dashboard/metrics",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "dashboard",
+                                "metrics"
+                            ]
+                        },
+                        "description": "Get overall platform metrics including total users, feeds, comments, and engagement."
+                    }
+                },
+                {
+                    "name": "Get Top Users",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/dashboard/top-users",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "dashboard",
+                                "top-users"
+                            ]
+                        },
+                        "description": "Get a list of top users based on engagement and activity."
+                    }
+                },
+                {
+                    "name": "Get Top Feeds",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/dashboard/top-feeds",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "dashboard",
+                                "top-feeds"
+                            ]
+                        },
+                        "description": "Get a list of top feeds based on engagement and popularity."
+                    }
+                },
+                {
+                    "name": "Get Activity Trends",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/dashboard/activity-trends",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "dashboard",
+                                "activity-trends"
+                            ]
+                        },
+                        "description": "Get activity trends over time including user engagement and content creation."
+                    }
+                },
+                {
+                    "name": "Get User Engagement Metrics",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/dashboard/user/123/engagement",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "dashboard",
+                                "user",
+                                "123",
+                                "engagement"
+                            ]
+                        },
+                        "description": "Get detailed engagement metrics for a specific user."
+                    }
+                },
+                {
+                    "name": "Get Content Insights",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/dashboard/content-insights",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "dashboard",
+                                "content-insights"
+                            ]
+                        },
+                        "description": "Get insights about content performance and user engagement patterns."
+                    }
+                }
+            ]
+        }
+    ],
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://188.166.232.67:3098",
+            "type": "string"
+        },
+        {
+            "key": "access_token",
+            "value": "your_access_token_here",
+            "type": "string"
+        }
+    ]
+}

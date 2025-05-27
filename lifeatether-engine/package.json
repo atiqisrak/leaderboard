@@ -4,7 +4,7 @@
   "description": "LifeAtEther Social Media Platform Backend",
   "main": "dist/app.js",
   "scripts": {
-    "start": "node dist/app.js",
+    "start": "node dist/app.js -p 3098",
     "dev": "nodemon src/app.ts",
     "build": "tsc",
     "lint": "eslint . --ext .ts",

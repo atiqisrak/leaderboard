@@ -1,0 +1,120 @@
+{
+    "name": "Feed Reactions",
+    "description": "Endpoints for managing reactions on feeds",
+    "item": [
+        {
+            "name": "Get Feed Reactions",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "{{base_url}}/api/feed-reactions/feed/123",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "feed-reactions",
+                        "feed",
+                        "123"
+                    ]
+                },
+                "description": "Get all reactions for a specific feed."
+            }
+        },
+        {
+            "name": "Get User Reactions",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "{{base_url}}/api/feed-reactions/user/123",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "feed-reactions",
+                        "user",
+                        "123"
+                    ]
+                },
+                "description": "Get all reactions made by a specific user."
+            }
+        },
+        {
+            "name": "Get Reaction Counts",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "{{base_url}}/api/feed-reactions/feed/123/counts",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "feed-reactions",
+                        "feed",
+                        "123",
+                        "counts"
+                    ]
+                },
+                "description": "Get the count of each reaction type for a specific feed."
+            }
+        },
+        {
+            "name": "Add Reaction",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{access_token}}"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"feed_id\": 123,\n    \"reaction_type\": \"like\"\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/api/feed-reactions",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "feed-reactions"
+                    ]
+                },
+                "description": "Add a reaction to a feed. Requires authentication."
+            }
+        },
+        {
+            "name": "Remove Reaction",
+            "request": {
+                "method": "DELETE",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{access_token}}"
+                    }
+                ],
+                "url": {
+                    "raw": "{{base_url}}/api/feed-reactions/123/like",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "feed-reactions",
+                        "123",
+                        "like"
+                    ]
+                },
+                "description": "Remove a reaction from a feed. Requires authentication."
+            }
+        }
+    ]
+}
