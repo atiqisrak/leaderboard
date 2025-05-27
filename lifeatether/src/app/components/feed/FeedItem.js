@@ -9,6 +9,7 @@ import CommentForm from "../comments/CommentForm";
 import FeedHeader from "./FeedHeader";
 import FeedContent from "./FeedContent";
 import FeedActions from "./FeedActions";
+import FeedReactions from "../reactions/FeedReactions";
 
 export default function FeedItem({ feed, user, onDelete, onEdit, onShare }) {
   const [comments, setComments] = useState([]);
@@ -107,6 +108,9 @@ export default function FeedItem({ feed, user, onDelete, onEdit, onShare }) {
           )}
         </p>
       </div>
+
+      {/* Reactions Section */}
+      <FeedReactions feedId={feed.id} />
 
       {/* Comments Section */}
       <div className="mt-6 border-t border-[#FCB813]/10 pt-6">

@@ -1,0 +1,163 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { useAuth } from "../../context/AuthContext";
+import Image from "next/image";
+
+const REACTION_TYPES = ["like", "love", "haha", "wow", "angry"];
+
+export default function FeedReactions({ feedId }) {
+  const [reactions, setReactions] = useState([]);
+  const [reactionCounts, setReactionCounts] = useState({});
+  const [userReaction, setUserReaction] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (feedId) {
+      fetchReactions();
+      fetchReactionCounts();
+    }
+  }, [feedId]);
+
+  const fetchReactions = async () => {
+    try {
+      const response = await fetch(`/api/feed-reactions/feed/${feedId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user?.access_token}`,
+        },
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        setReactions(data.reactions);
+        // Find user's reaction if any
+        const userReaction = data.reactions.find(
+          (reaction) => reaction.user_id === user?.id
+        );
+        setUserReaction(userReaction?.reaction_type || null);
+      } else {
+        setError(data.message || "Failed to fetch reactions");
+      }
+    } catch (error) {
+      console.error("Error fetching reactions:", error);
+      setError("Failed to fetch reactions");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchReactionCounts = async () => {
+    try {
+      const response = await fetch(
+        `/api/feed-reactions/feed/${feedId}/counts`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user?.access_token}`,
+          },
+        }
+      );
+      const data = await response.json();
+
+      if (data.success) {
+        const counts = {};
+        data.counts.forEach((count) => {
+          counts[count.reaction_type] = parseInt(count.count);
+        });
+        setReactionCounts(counts);
+      }
+    } catch (error) {
+      console.error("Error fetching reaction counts:", error);
+    }
+  };
+
+  const handleReaction = async (reactionType) => {
+    if (!user) return;
+
+    try {
+      // If user already reacted with this type, remove the reaction
+      if (userReaction === reactionType) {
+        const response = await fetch(`/api/feed-reactions/${feedId}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${user.access_token}`,
+          },
+        });
+        const data = await response.json();
+
+        if (data.success) {
+          setUserReaction(null);
+          fetchReactionCounts();
+          fetchReactions();
+        }
+        return;
+      }
+
+      // Add or update reaction
+      const response = await fetch("/api/feed-reactions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.access_token}`,
+        },
+        body: JSON.stringify({
+          feed_id: feedId,
+          reaction_type: reactionType,
+        }),
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        setUserReaction(reactionType);
+        fetchReactionCounts();
+        fetchReactions();
+      } else {
+        setError(data.message || "Failed to add reaction");
+      }
+    } catch (error) {
+      console.error("Error handling reaction:", error);
+      setError("Failed to handle reaction");
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center py-2">
+        <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-[#FCB813]"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex items-center gap-2 py-2">
+      {REACTION_TYPES.map((type) => (
+        <button
+          key={type}
+          onClick={() => handleReaction(type)}
+          className={`relative group flex items-center gap-1 px-2 py-1 rounded-full transition-colors ${
+            userReaction === type ? "bg-[#FCB813]/20" : "hover:bg-[#23262b]"
+          }`}
+        >
+          <Image
+            src={`/reactions/${type}.svg`}
+            alt={type}
+            width={20}
+            height={20}
+            className={`transition-transform group-hover:scale-110 ${
+              userReaction === type ? "scale-110" : ""
+            }`}
+          />
+          {reactionCounts[type] > 0 && (
+            <span className="text-sm text-[#b0b3b8]">
+              {reactionCounts[type]}
+            </span>
+          )}
+        </button>
+      ))}
+      {error && <p className="text-red-500 text-sm">{error}</p>}
+    </div>
+  );
+}
