@@ -8,6 +8,9 @@ import CommentActions from "./CommentActions";
 
 export default function CommentCard({ comment, onReply, onDelete, user }) {
   const [showReplyForm, setShowReplyForm] = useState(false);
+  const [showReplies, setShowReplies] = useState(false);
+
+  const hasReplies = comment.replies && comment.replies.length > 0;
 
   return (
     <div className="space-y-4">
@@ -57,17 +60,35 @@ export default function CommentCard({ comment, onReply, onDelete, user }) {
           )}
         </div>
       </div>
-      {comment.replies && comment.replies.length > 0 && (
-        <div className="ml-14 space-y-4">
-          {comment.replies.map((reply) => (
-            <CommentCard
-              key={reply.id}
-              comment={reply}
-              onReply={onReply}
-              onDelete={onDelete}
-              user={user}
-            />
-          ))}
+
+      {hasReplies && (
+        <div className="ml-14">
+          {showReplies ? (
+            <div className="space-y-4">
+              {comment.replies.map((reply) => (
+                <CommentCard
+                  key={reply.id}
+                  comment={reply}
+                  onReply={onReply}
+                  onDelete={onDelete}
+                  user={user}
+                />
+              ))}
+              <button
+                onClick={() => setShowReplies(false)}
+                className="text-[#FCB813] hover:text-[#ffd34d] font-medium"
+              >
+                Hide replies
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => setShowReplies(true)}
+              className="text-[#FCB813] hover:text-[#ffd34d] font-medium"
+            >
+              Show replies ({comment.replies.length})
+            </button>
+          )}
         </div>
       )}
     </div>

@@ -14,6 +14,9 @@ export default function FeedItem({ feed, user, onDelete, onEdit, onShare }) {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showCommentBox, setShowCommentBox] = useState(false);
+  const [showAllComments, setShowAllComments] = useState(false);
+  const [showFullContent, setShowFullContent] = useState(false);
 
   useEffect(() => {
     fetchComments();
@@ -44,8 +47,8 @@ export default function FeedItem({ feed, user, onDelete, onEdit, onShare }) {
 
   const handleComment = async (content, parentCommentId = null) => {
     try {
-      // Just refresh the comments after a successful submission
       await fetchComments();
+      setShowCommentBox(false); // Hide comment box after successful submission
     } catch (error) {
       console.error("Error refreshing comments:", error);
       setError("Failed to refresh comments");
@@ -64,7 +67,7 @@ export default function FeedItem({ feed, user, onDelete, onEdit, onShare }) {
       const data = await response.json();
 
       if (data.success) {
-        fetchComments(); // Refresh comments after deletion
+        fetchComments();
       } else {
         setError(data.message || "Failed to delete comment");
       }
@@ -73,6 +76,9 @@ export default function FeedItem({ feed, user, onDelete, onEdit, onShare }) {
       setError("Failed to delete comment");
     }
   };
+
+  // Get the last comment if not showing all comments
+  const displayedComments = showAllComments ? comments : comments.slice(-1);
 
   return (
     <div className="bg-[#23262b] rounded-xl p-6 shadow-lg">
@@ -86,32 +92,72 @@ export default function FeedItem({ feed, user, onDelete, onEdit, onShare }) {
           onShare={onShare}
         />
       </div>
-      <FeedContent feed={feed} />
+
+      {/* Feed Content with Read More */}
+      <div className="mb-4">
+        <p className="text-[#b0b3b8] whitespace-pre-wrap">
+          {showFullContent ? feed.content : feed.content.slice(0, 200)}
+          {feed.content.length > 200 && (
+            <button
+              onClick={() => setShowFullContent(!showFullContent)}
+              className="text-[#FCB813] hover:text-[#ffd34d] ml-2"
+            >
+              {showFullContent ? "Show less" : "Read more..."}
+            </button>
+          )}
+        </p>
+      </div>
 
       {/* Comments Section */}
       <div className="mt-6 border-t border-[#FCB813]/10 pt-6">
-        <h3 className="text-lg font-semibold text-white mb-4">Comments</h3>
-        <CommentForm
-          feedId={feed.id}
-          onSubmit={(content) => handleComment(content)}
-        />
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-lg font-semibold text-white">Comments</h3>
+          <button
+            onClick={() => setShowCommentBox(!showCommentBox)}
+            className="px-4 py-2 bg-[#FCB813] text-[#181b20] rounded-lg font-semibold hover:bg-[#ffd34d] transition-colors"
+          >
+            {showCommentBox ? "Cancel" : "Comment"}
+          </button>
+        </div>
+
+        {showCommentBox && (
+          <CommentForm
+            feedId={feed.id}
+            onSubmit={(content) => handleComment(content)}
+          />
+        )}
+
         {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+
         {loading ? (
           <div className="flex justify-center py-4">
             <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-[#FCB813]"></div>
           </div>
         ) : (
-          <div className="mt-6 space-y-6">
-            {comments.map((comment) => (
-              <CommentCard
-                key={comment.id}
-                comment={comment}
-                user={user}
-                onReply={handleComment}
-                onDelete={handleDeleteComment}
-              />
-            ))}
-          </div>
+          <>
+            <div className="mt-6 space-y-6">
+              {displayedComments.map((comment) => (
+                <CommentCard
+                  key={comment.id}
+                  comment={comment}
+                  user={user}
+                  onReply={handleComment}
+                  onDelete={handleDeleteComment}
+                />
+              ))}
+            </div>
+
+            {comments.length > 1 && (
+              <button
+                onClick={() => setShowAllComments(!showAllComments)}
+                className="mt-4 text-[#FCB813] hover:text-[#ffd34d] font-medium"
+              >
+                {showAllComments
+                  ? "Show less comments"
+                  : `Show all comments (${comments.length})`}
+              </button>
+            )}
+          </>
         )}
       </div>
     </div>
