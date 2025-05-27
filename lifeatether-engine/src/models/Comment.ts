@@ -58,9 +58,12 @@ Comment.init(
   }
 );
 
-Comment.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
-Comment.belongsTo(Feed, { foreignKey: 'feed_id', as: 'feed' });
+// Self-referential association for nested comments
 Comment.belongsTo(Comment, { foreignKey: 'parent_comment_id', as: 'parent' });
 Comment.hasMany(Comment, { foreignKey: 'parent_comment_id', as: 'replies' });
+
+// Associations with Feed and User
+Comment.belongsTo(Feed, { foreignKey: 'feed_id', as: 'feed' });
+Comment.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
 
 export default Comment; 

@@ -5,6 +5,7 @@ import { config } from './config/config';
 import sequelize from './config/database';
 import userRoutes from './routes/userRoutes';
 import feedRoutes from './routes/feedRoutes';
+import commentRoutes from './routes/commentRoutes';
 
 const app = express();
 
@@ -13,7 +14,7 @@ app.use(cors());
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+  
 // Database connection
 sequelize.authenticate()
   .then(() => {
@@ -26,6 +27,7 @@ sequelize.authenticate()
 // API Routes
 app.use(`${config.api.prefix}/users`, userRoutes);
 app.use(`${config.api.prefix}/feeds`, feedRoutes);
+app.use(`${config.api.prefix}/comments`, commentRoutes);
 
 // Health check
 app.get('/health', (req, res) => {
