@@ -25,16 +25,26 @@ export async function POST(request) {
     }
 
     // Store user data in a cookie
-    cookies().set("user", JSON.stringify(data.user), {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60, // 7 days
-    });
+    cookies().set(
+      "user",
+      JSON.stringify({
+        ...data.user,
+        access_token: data.token,
+      }),
+      {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60, // 7 days
+      }
+    );
 
     return NextResponse.json({
       success: true,
-      user: data.user,
+      user: {
+        ...data.user,
+        access_token: data.token,
+      },
     });
   } catch (error) {
     console.error("Login error:", error);

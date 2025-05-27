@@ -14,9 +14,25 @@ export default function Login({ isModal = true }) {
     e.preventDefault();
     setError("");
 
-    const success = await login(email, password);
-    if (!success) {
-      setError("Invalid email or password");
+    try {
+      const response = await fetch("/api/auth", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        await login(email, password);
+      } else {
+        setError(data.message || "Invalid email or password");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      setError("An error occurred during login");
     }
   };
 

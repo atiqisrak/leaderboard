@@ -1,14 +1,23 @@
+"use client";
+
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Feed from "./components/Feed";
 import Image from "next/image";
+import { useState } from "react";
 
 export default function Home() {
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+  const handlePostCreated = () => {
+    setRefreshTrigger((prev) => prev + 1);
+  };
+
   return (
     <main className="min-h-screen bg-[#181b20] text-white">
       <Navbar />
-      <Hero />
-      <Feed />
+      <Hero onPostCreated={handlePostCreated} />
+      <Feed key={refreshTrigger} />
 
       <section id="community" className="py-12 bg-[#23262b] my-8 rounded-2xl">
         <div className="max-w-3xl mx-auto px-6">

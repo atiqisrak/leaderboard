@@ -1,80 +1,101 @@
 "use client";
 
 import { useState } from "react";
+import { useAuth } from "../context/AuthContext";
 
 export default function CreatePostModal({ isOpen, onClose, onSubmit }) {
-  const [newPost, setNewPost] = useState({ title: "", content: "" });
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [error, setError] = useState("");
+  const { user } = useAuth();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSubmit(newPost);
-    setNewPost({ title: "", content: "" });
+    setError("");
+
+    if (!title.trim() || !content.trim()) {
+      setError("Please fill in all fields");
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/feeds", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user?.access_token}`,
+        },
+        body: JSON.stringify({ title, content }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        onSubmit(data.feed);
+        setTitle("");
+        setContent("");
+        onClose();
+      } else {
+        setError(data.message || "Failed to create post");
+      }
+    } catch (error) {
+      console.error("Error creating post:", error);
+      setError("Failed to create post");
+    }
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-      <div className="bg-[#23262b] rounded-2xl p-6 w-full max-w-lg transform transition-all">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-[#FCB813]">What's Up!</h2>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-white transition-colors"
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
-        </div>
-
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div className="bg-[#23262b] p-8 rounded-2xl w-full max-w-md">
+        <h2 className="text-2xl font-bold text-white mb-6">Create New Post</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
+            <label
+              htmlFor="title"
+              className="block text-sm font-medium text-[#b0b3b8] mb-1"
+            >
+              Title
+            </label>
             <input
               type="text"
-              placeholder="Give it a title..."
-              value={newPost.title}
-              onChange={(e) =>
-                setNewPost({ ...newPost, title: e.target.value })
-              }
-              className="w-full px-4 py-3 bg-[#181b20] border border-[#FCB813]/20 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#FCB813] transition-colors"
+              id="title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="w-full px-4 py-2 bg-[#181b20] border border-[#FCB813]/20 rounded-lg text-white focus:outline-none focus:border-[#FCB813]"
               required
             />
           </div>
           <div>
+            <label
+              htmlFor="content"
+              className="block text-sm font-medium text-[#b0b3b8] mb-1"
+            >
+              Content
+            </label>
             <textarea
-              placeholder="Share your thoughts..."
-              value={newPost.content}
-              onChange={(e) =>
-                setNewPost({ ...newPost, content: e.target.value })
-              }
-              className="w-full px-4 py-3 bg-[#181b20] border border-[#FCB813]/20 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#FCB813] transition-colors h-32 resize-none"
+              id="content"
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              className="w-full px-4 py-2 bg-[#181b20] border border-[#FCB813]/20 rounded-lg text-white focus:outline-none focus:border-[#FCB813] h-32 resize-none"
               required
             />
           </div>
-          <div className="flex justify-end space-x-3 pt-2">
+          {error && <p className="text-red-500 text-sm">{error}</p>}
+          <div className="flex justify-end gap-4">
             <button
               type="button"
               onClick={onClose}
-              className="px-6 py-2 text-gray-400 hover:text-white transition-colors"
+              className="px-4 py-2 text-[#b0b3b8] hover:text-white transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-6 py-2 bg-[#FCB813] text-[#181b20] rounded-lg font-semibold hover:bg-[#ffd34d] transition-all hover:-translate-y-0.5 shadow-lg"
+              className="px-4 py-2 bg-[#FCB813] text-[#181b20] rounded-lg font-semibold hover:bg-[#ffd34d] transition-colors"
             >
-              Share
+              Post
             </button>
           </div>
         </form>

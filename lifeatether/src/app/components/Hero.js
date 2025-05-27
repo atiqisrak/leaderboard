@@ -5,7 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import { useRouter } from "next/navigation";
 import CreatePostModal from "./CreatePostModal";
 
-export default function Hero() {
+export default function Hero({ onPostCreated }) {
   const [showModal, setShowModal] = useState(false);
   const { user } = useAuth();
   const router = useRouter();
@@ -18,25 +18,10 @@ export default function Hero() {
     setShowModal(true);
   };
 
-  const handleCreatePost = async (postData) => {
-    try {
-      const response = await fetch("/api/feed", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...postData,
-          authorId: user.id,
-        }),
-      });
-
-      if (response.ok) {
-        setShowModal(false);
-        router.refresh(); // Refresh the page to show the new post
-      }
-    } catch (error) {
-      console.error("Error creating post:", error);
+  const handleCreatePost = (postData) => {
+    setShowModal(false);
+    if (onPostCreated) {
+      onPostCreated(postData);
     }
   };
 
