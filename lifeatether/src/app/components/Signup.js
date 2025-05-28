@@ -4,36 +4,66 @@ import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
-export default function Login({ isModal = true }) {
+export default function Signup({ isModal = true }) {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuth();
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setIsLoading(true);
 
     try {
-      const response = await fetch("/api/auth", {
+      console.log("Submitting registration form");
+      const response = await fetch("/api/users/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+          role: "user",
+        }),
       });
 
       const data = await response.json();
+      console.log("Registration response:", {
+        ...data,
+        user: data.user ? { ...data.user, password: "[REDACTED]" } : null,
+      });
 
-      if (data.success) {
-        await login(email, password);
+      if (!response.ok) {
+        throw new Error(data.message || "Registration failed");
+      }
+
+      if (data.success && data.user && data.user.access_token) {
+        console.log("Registration successful, logging in user");
+        const loginSuccess = await login(email, password);
+        if (!loginSuccess) {
+          throw new Error("Registration successful but login failed");
+        }
       } else {
-        setError(data.message || "Invalid email or password");
+        console.error("Invalid response format:", data);
+        throw new Error("Invalid response from server");
       }
     } catch (error) {
-      console.error("Login error:", error);
-      setError("An error occurred during login");
+      console.error("Registration error:", error);
+      setError(
+        error.message ||
+          "An error occurred during registration. Please try again."
+      );
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -58,6 +88,23 @@ export default function Login({ isModal = true }) {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label
+              htmlFor="name"
+              className="block text-sm font-medium text-[#b0b3b8] mb-1"
+            >
+              Full Name
+            </label>
+            <input
+              type="text"
+              id="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full px-4 py-2 bg-[#181b20] border border-[#FCB813]/20 rounded-lg text-white focus:outline-none focus:border-[#FCB813]"
+              required
+              disabled={isLoading}
+            />
+          </div>
+          <div>
+            <label
               htmlFor="email"
               className="block text-sm font-medium text-[#b0b3b8] mb-1"
             >
@@ -70,6 +117,7 @@ export default function Login({ isModal = true }) {
               onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-2 bg-[#181b20] border border-[#FCB813]/20 rounded-lg text-white focus:outline-none focus:border-[#FCB813]"
               required
+              disabled={isLoading}
             />
           </div>
           <div>
@@ -80,27 +128,36 @@ export default function Login({ isModal = true }) {
               Password
             </label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full px-4 py-2 bg-[#181b20] border border-[#FCB813]/20 rounded-lg text-white focus:outline-none focus:border-[#FCB813]"
               required
+              disabled={isLoading}
             />
+            <button
+              type="button"
+              className="text-sm text-[#b0b3b8] mt-1"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? "Hide Password" : "Show Password"}
+            </button>
           </div>
           {error && <p className="text-red-500 text-sm">{error}</p>}
           <button
             type="submit"
-            className="w-full bg-[#FCB813] text-[#181b20] py-2 rounded-lg font-semibold hover:bg-[#ffd34d] transition-colors"
+            className="w-full bg-[#FCB813] text-[#181b20] py-2 rounded-lg font-semibold hover:bg-[#ffd34d] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={isLoading}
           >
-            Login
+            {isLoading ? "Signing up..." : "Sign Up"}
           </button>
         </form>
         <div className="flex justify-center mt-4">
           <p className="text-sm text-[#b0b3b8]">
-            Don't have an account?{" "}
-            <Link href="/auth/signup" className="text-[#FCB813]">
-              Sign up
+            Already have an account?{" "}
+            <Link href="/auth/login" className="text-[#FCB813]">
+              Login
             </Link>
           </p>
         </div>

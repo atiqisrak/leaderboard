@@ -28,14 +28,6 @@ export default function FeedMetrics({ feedId }) {
     fetchComments();
   }, [feedId]);
 
-  //   console.log("Reactions", reactions?.reactions);
-  console.log("Comments", comments);
-
-  reactions?.reactions.map((reaction) => {
-    // console reaction types
-    console.log("Reactions", reaction.reaction_type);
-  });
-
   return (
     <div>
       <div className="flex items-center justify-between text-sm font-semibold text-gray-300 mt-2">
@@ -46,17 +38,19 @@ export default function FeedMetrics({ feedId }) {
           </span> */}
           <div className="flex items-center gap-1">
             <div className="flex -space-x-1">
-              {reactions?.reactions.map((reaction) => (
-                <div key={reaction.id} className="relative">
-                  <Image
-                    src={`/reactions/${reaction.reaction_type}.svg`}
-                    alt={reaction.reaction_type}
-                    width={20}
-                    height={20}
-                    className="rounded-full border border-[#23262b]"
-                  />
-                </div>
-              ))}
+              {reactions?.reactions &&
+                reactions?.reactions.length > 0 &&
+                reactions?.reactions?.map((reaction) => (
+                  <div key={reaction.id} className="relative">
+                    <Image
+                      src={`/reactions/${reaction.reaction_type}.svg`}
+                      alt={reaction.reaction_type}
+                      width={20}
+                      height={20}
+                      className="rounded-full border border-[#23262b]"
+                    />
+                  </div>
+                ))}
             </div>
             <span className="text-sm font-medium text-[#b0b3b8]">
               {reactionsCount}
