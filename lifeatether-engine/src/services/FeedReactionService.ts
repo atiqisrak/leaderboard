@@ -1,5 +1,6 @@
 import FeedReaction from '../models/FeedReaction';
 import sequelize from '../config/database';
+import { QueryTypes } from 'sequelize';
 
 export class FeedReactionService {
   async createOrUpdateReaction(reactionData: {
@@ -55,26 +56,37 @@ export class FeedReactionService {
   }
 
   async getReactionCounts(feedId: number) {
-    interface ReactionCount {
-      reaction_type: string;
-      count: string;
-    }
-
-    const reactions = await FeedReaction.findAll({
-      where: { feed_id: feedId },
-      attributes: [
-        'reaction_type',
-        [sequelize.fn('COUNT', sequelize.col('id')), 'count']
-      ],
-      group: ['reaction_type'],
-      raw: true
-    }) as unknown as ReactionCount[];
+    console.log('Getting reaction counts for feed:', feedId);
     
-    // Transform the data to ensure count is a number
-    return reactions.map(reaction => ({
-      reaction_type: reaction.reaction_type,
-      count: parseInt(reaction.count)
+    // First, get all reactions for the feed
+    const allReactions = await FeedReaction.findAll({
+      where: { feed_id: feedId },
+      order: [['created_at', 'DESC']]
+    });
+
+    // Get only the latest reaction for each user
+    const latestReactions = allReactions.reduce<FeedReaction[]>((acc, reaction) => {
+      const existingReaction = acc.find(r => r.user_id === reaction.user_id);
+      if (!existingReaction) {
+        acc.push(reaction);
+      }
+      return acc;
+    }, []);
+
+    // Count reactions by type
+    const counts = latestReactions.reduce<Record<string, number>>((acc, reaction) => {
+      acc[reaction.reaction_type] = (acc[reaction.reaction_type] || 0) + 1;
+      return acc;
+    }, {});
+
+    // Convert to array format
+    const result = Object.entries(counts).map(([reaction_type, count]) => ({
+      reaction_type,
+      count: count.toString()
     }));
+
+    console.log('Count results:', result);
+    return result;
   }
 
   async getUserReactionForFeed(feedId: number, userId: number) {

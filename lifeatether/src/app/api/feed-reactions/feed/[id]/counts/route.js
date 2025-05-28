@@ -5,18 +5,24 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 export async function GET(request, { params }) {
   try {
+    console.log("Fetching counts for feed:", params.id);
+
     const response = await fetch(
       `${BASE_URL}/feed-reactions/feed/${params.id}/counts`,
       {
         headers: {
           "Content-Type": "application/json",
+          "Cache-Control": "no-cache, no-store, must-revalidate",
+          Pragma: "no-cache",
         },
       }
     );
 
     const data = await response.json();
+    console.log("Backend response:", data);
 
     if (!response.ok) {
+      console.log("Error response:", data);
       return NextResponse.json(
         {
           success: false,
@@ -26,9 +32,14 @@ export async function GET(request, { params }) {
       );
     }
 
-    return NextResponse.json({
-      success: true,
-      counts: data,
+    console.log("Sending response to frontend:", data);
+    return NextResponse.json(data, {
+      headers: {
+        "Cache-Control":
+          "no-store, no-cache, must-revalidate, proxy-revalidate",
+        Pragma: "no-cache",
+        Expires: "0",
+      },
     });
   } catch (error) {
     console.error("Fetch reaction counts error:", error);

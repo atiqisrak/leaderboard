@@ -17,7 +17,6 @@ export default function FeedReactions({ feedId }) {
   useEffect(() => {
     if (feedId) {
       fetchReactions();
-      fetchReactionCounts();
     }
   }, [feedId]);
 
@@ -50,6 +49,14 @@ export default function FeedReactions({ feedId }) {
         }, []);
 
         setReactions(latestReactions);
+
+        // Calculate counts from latest reactions
+        const counts = latestReactions.reduce((acc, reaction) => {
+          acc[reaction.reaction_type] = (acc[reaction.reaction_type] || 0) + 1;
+          return acc;
+        }, {});
+        setReactionCounts(counts);
+
         // Find user's latest reaction if any
         const userReaction = latestReactions.find(
           (reaction) => reaction.user_id === user?.id
@@ -63,30 +70,6 @@ export default function FeedReactions({ feedId }) {
       setError("Failed to fetch reactions");
     } finally {
       setLoading(false);
-    }
-  };
-
-  const fetchReactionCounts = async () => {
-    try {
-      const response = await fetch(
-        `/api/feed-reactions/feed/${feedId}/counts`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const data = await response.json();
-
-      if (data.success) {
-        const counts = {};
-        data.counts.forEach((count) => {
-          counts[count.reaction_type] = parseInt(count.count);
-        });
-        setReactionCounts(counts);
-      }
-    } catch (error) {
-      console.error("Error fetching reaction counts:", error);
     }
   };
 
@@ -106,7 +89,6 @@ export default function FeedReactions({ feedId }) {
 
         if (data.success) {
           setUserReaction(null);
-          fetchReactionCounts();
           fetchReactions();
         }
         return;
@@ -134,7 +116,6 @@ export default function FeedReactions({ feedId }) {
 
       if (data.success) {
         setUserReaction(reactionType);
-        fetchReactionCounts();
         fetchReactions();
       } else {
         setError(data.message || "Failed to add reaction");
@@ -173,7 +154,7 @@ export default function FeedReactions({ feedId }) {
             }`}
           />
           {reactionCounts[type] > 0 && (
-            <span className="text-sm text-[#b0b3b8]">
+            <span className="text-sm font-medium text-[#b0b3b8] min-w-[20px] text-center">
               {reactionCounts[type]}
             </span>
           )}
