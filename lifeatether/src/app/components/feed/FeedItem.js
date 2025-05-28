@@ -18,10 +18,23 @@ export default function FeedItem({ feed, user, onDelete, onEdit, onShare }) {
   const [showCommentBox, setShowCommentBox] = useState(false);
   const [showAllComments, setShowAllComments] = useState(false);
   const [showFullContent, setShowFullContent] = useState(false);
+  const [openDropdownId, setOpenDropdownId] = useState(null);
 
   useEffect(() => {
     fetchComments();
   }, [feed.id]);
+
+  // Add click outside handler to close dropdowns
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest(".comment-actions")) {
+        setOpenDropdownId(null);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, []);
 
   const fetchComments = async () => {
     try {
@@ -147,6 +160,8 @@ export default function FeedItem({ feed, user, onDelete, onEdit, onShare }) {
                   user={user}
                   onReply={handleComment}
                   onDelete={handleDeleteComment}
+                  openDropdownId={openDropdownId}
+                  setOpenDropdownId={setOpenDropdownId}
                 />
               ))}
             </div>

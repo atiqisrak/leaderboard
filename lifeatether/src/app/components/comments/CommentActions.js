@@ -1,18 +1,22 @@
 "use client";
 
-import { useState } from "react";
-
-export default function CommentActions({ comment, user, onReply, onDelete }) {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
+export default function CommentActions({
+  comment,
+  user,
+  onReply,
+  onDelete,
+  openDropdownId,
+  setOpenDropdownId,
+}) {
   if (!user) return null;
 
   const canModify = user.id === comment.user_id || user.role === "admin";
+  const isOpen = openDropdownId === comment.id;
 
   return (
-    <div className="relative">
+    <div className="relative comment-actions">
       <button
-        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+        onClick={() => setOpenDropdownId(isOpen ? null : comment.id)}
         className="p-2 text-[#b0b3b8] hover:text-white transition-colors"
       >
         <svg
@@ -29,12 +33,12 @@ export default function CommentActions({ comment, user, onReply, onDelete }) {
           />
         </svg>
       </button>
-      {isDropdownOpen && (
+      {isOpen && (
         <div className="absolute right-0 mt-2 w-48 bg-[#181b20] rounded-lg shadow-lg py-1 z-10">
           <button
             onClick={() => {
               onReply();
-              setIsDropdownOpen(false);
+              setOpenDropdownId(null);
             }}
             className="w-full px-4 py-2 text-left text-[#b0b3b8] hover:bg-[#23262b] hover:text-white transition-colors"
           >
@@ -44,7 +48,7 @@ export default function CommentActions({ comment, user, onReply, onDelete }) {
             <button
               onClick={() => {
                 onDelete(comment.id);
-                setIsDropdownOpen(false);
+                setOpenDropdownId(null);
               }}
               className="w-full px-4 py-2 text-left text-red-500 hover:bg-[#23262b] hover:text-red-400 transition-colors"
             >

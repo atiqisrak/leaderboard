@@ -64,11 +64,19 @@ export default function CommentForm({
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit(e);
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit} className="space-y-2">
       <textarea
         value={content}
         onChange={(e) => setContent(e.target.value)}
+        onKeyDown={handleKeyDown}
         placeholder="Write a comment..."
         className="w-full px-4 py-2 bg-[#23262b] border border-[#FCB813]/20 rounded-lg text-white focus:outline-none focus:border-[#FCB813] h-24 resize-none"
       />

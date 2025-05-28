@@ -6,7 +6,14 @@ import Image from "next/image";
 import CommentForm from "./CommentForm";
 import CommentActions from "./CommentActions";
 
-export default function CommentCard({ comment, onReply, onDelete, user }) {
+export default function CommentCard({
+  comment,
+  onReply,
+  onDelete,
+  user,
+  openDropdownId,
+  setOpenDropdownId,
+}) {
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
 
@@ -41,6 +48,8 @@ export default function CommentCard({ comment, onReply, onDelete, user }) {
                 user={user}
                 onReply={() => setShowReplyForm(true)}
                 onDelete={onDelete}
+                openDropdownId={openDropdownId}
+                setOpenDropdownId={setOpenDropdownId}
               />
             </div>
             <p className="text-[#b0b3b8]">{comment.content}</p>
@@ -72,6 +81,8 @@ export default function CommentCard({ comment, onReply, onDelete, user }) {
                   onReply={onReply}
                   onDelete={onDelete}
                   user={user}
+                  openDropdownId={openDropdownId}
+                  setOpenDropdownId={setOpenDropdownId}
                 />
               ))}
               <button
