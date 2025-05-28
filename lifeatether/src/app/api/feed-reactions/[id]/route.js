@@ -40,6 +40,7 @@ export async function PUT(request, { params }) {
         Authorization: `Bearer ${user.access_token}`,
       },
       body: JSON.stringify({
+        feed_id: parseInt(id),
         reaction_type,
       }),
     });

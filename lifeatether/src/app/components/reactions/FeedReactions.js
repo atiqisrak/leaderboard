@@ -94,15 +94,33 @@ export default function FeedReactions({ feedId }) {
         return;
       }
 
-      // Check if user has any existing reaction
-      const method = userReaction ? "PUT" : "POST";
-      const url = userReaction
-        ? `/api/feed-reactions/${feedId}`
-        : "/api/feed-reactions";
+      // If user has an existing reaction, update it
+      if (userReaction) {
+        const response = await fetch(`/api/feed-reactions/${feedId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.access_token}`,
+          },
+          body: JSON.stringify({
+            feed_id: feedId,
+            reaction_type: reactionType,
+          }),
+        });
+        const data = await response.json();
 
-      // Add or update reaction
-      const response = await fetch(url, {
-        method,
+        if (data.success) {
+          setUserReaction(reactionType);
+          fetchReactions();
+        } else {
+          setError(data.message || "Failed to update reaction");
+        }
+        return;
+      }
+
+      // If user has no existing reaction, create a new one
+      const response = await fetch("/api/feed-reactions", {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${user.access_token}`,
