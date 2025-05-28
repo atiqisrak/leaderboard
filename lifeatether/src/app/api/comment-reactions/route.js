@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 export async function POST(request) {
   try {
     const token = request.headers.get("authorization")?.split(" ")[1];
-    const body = await request.json();
+    const { comment_id, reaction_type } = await request.json();
 
     if (!token) {
       return NextResponse.json(
@@ -14,13 +14,32 @@ export async function POST(request) {
       );
     }
 
-    const response = await fetch(`${API_URL}/comment-reactions`, {
+    if (!comment_id || !reaction_type) {
+      return NextResponse.json(
+        { success: false, message: "Missing required fields" },
+        { status: 400 }
+      );
+    }
+
+    // Validate reaction type
+    const validReactionTypes = ["like", "love", "haha", "wow", "angry"];
+    if (!validReactionTypes.includes(reaction_type)) {
+      return NextResponse.json(
+        { success: false, message: "Invalid reaction type" },
+        { status: 400 }
+      );
+    }
+
+    const response = await fetch(`${BASE_URL}/comment-reactions`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify({
+        comment_id: parseInt(comment_id),
+        reaction_type,
+      }),
     });
 
     const data = await response.json();

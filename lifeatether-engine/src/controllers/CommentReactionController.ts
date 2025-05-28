@@ -24,6 +24,24 @@ export class CommentReactionController {
     }
   };
 
+  updateReaction = async (req: Request, res: Response) => {
+    try {
+      if (!req.user?.id) {
+        res.status(401).json({ error: 'Unauthorized' });
+        return;
+      }
+      const { commentId } = req.params;
+      const reaction = await this.commentReactionService.updateReaction(
+        Number(commentId),
+        Number(req.user.id),
+        req.body.reaction_type
+      );
+      res.json(reaction);
+    } catch (error: any) {
+      res.status(400).json({ error: error.message });
+    }
+  };
+
   removeReaction = async (req: Request, res: Response) => {
     try {
       if (!req.user?.id) {

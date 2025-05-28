@@ -10,6 +10,28 @@ export class CommentReactionService {
     return CommentReaction.create(reactionData);
   }
 
+  async updateReaction(commentId: number, userId: number, reactionType: string) {
+    const existingReaction = await CommentReaction.findOne({
+      where: {
+        comment_id: commentId,
+        user_id: userId
+      }
+    });
+
+    if (existingReaction) {
+      // Update existing reaction
+      await existingReaction.update({ reaction_type: reactionType });
+      return existingReaction;
+    }
+
+    // Create new reaction if none exists
+    return this.createReaction({
+      comment_id: commentId,
+      user_id: userId,
+      reaction_type: reactionType
+    });
+  }
+
   async removeReaction(commentId: number, userId: number, reactionType: string) {
     return CommentReaction.destroy({
       where: {

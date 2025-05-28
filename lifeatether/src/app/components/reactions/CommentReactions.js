@@ -85,14 +85,20 @@ export default function CommentReactions({ commentId }) {
         const response = await fetch(`/api/comment-reactions/${commentId}`, {
           method: "DELETE",
           headers: {
+            "Content-Type": "application/json",
             Authorization: `Bearer ${user.access_token}`,
           },
+          body: JSON.stringify({
+            reaction_type: reactionType,
+          }),
         });
         const data = await response.json();
 
         if (data.success) {
           setUserReaction(null);
           fetchReactions();
+        } else {
+          setError(data.message || "Failed to remove reaction");
         }
         return;
       }
@@ -106,7 +112,6 @@ export default function CommentReactions({ commentId }) {
             Authorization: `Bearer ${user.access_token}`,
           },
           body: JSON.stringify({
-            comment_id: commentId,
             reaction_type: reactionType,
           }),
         });
