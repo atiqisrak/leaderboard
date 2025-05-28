@@ -5,6 +5,7 @@ import { formatDistanceToNow } from "date-fns";
 import Image from "next/image";
 import CommentForm from "./CommentForm";
 import CommentActions from "./CommentActions";
+import CommentReactions from "../reactions/CommentReactions";
 
 export default function CommentCard({
   comment,
@@ -53,6 +54,9 @@ export default function CommentCard({
               />
             </div>
             <p className="text-[#b0b3b8]">{comment.content}</p>
+            <div className="mt-2">
+              <CommentReactions commentId={comment.id} />
+            </div>
           </div>
           {showReplyForm && (
             <div className="mt-4 ml-4">
