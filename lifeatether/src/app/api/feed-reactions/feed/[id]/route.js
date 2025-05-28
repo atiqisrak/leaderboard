@@ -11,6 +11,7 @@ export async function GET(request, { params }) {
         headers: {
           "Content-Type": "application/json",
         },
+        cache: "no-store",
       }
     );
 
@@ -26,10 +27,20 @@ export async function GET(request, { params }) {
       );
     }
 
-    return NextResponse.json({
-      success: true,
-      reactions: data,
-    });
+    return NextResponse.json(
+      {
+        success: true,
+        reactions: data,
+      },
+      {
+        headers: {
+          "Cache-Control":
+            "no-store, no-cache, must-revalidate, proxy-revalidate",
+          Pragma: "no-cache",
+          Expires: "0",
+        },
+      }
+    );
   } catch (error) {
     console.error("Fetch reactions error:", error);
     return NextResponse.json(

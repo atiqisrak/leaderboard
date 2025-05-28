@@ -32,9 +32,26 @@ export default function FeedReactions({ feedId }) {
       const data = await response.json();
 
       if (data.success) {
-        setReactions(data.reactions);
-        // Find user's reaction if any
-        const userReaction = data.reactions.find(
+        // Get only the latest reaction for each user
+        const latestReactions = data.reactions.reduce((acc, reaction) => {
+          const existingReaction = acc.find(
+            (r) => r.user_id === reaction.user_id
+          );
+          if (
+            !existingReaction ||
+            new Date(reaction.createdAt) > new Date(existingReaction.createdAt)
+          ) {
+            return [
+              ...acc.filter((r) => r.user_id !== reaction.user_id),
+              reaction,
+            ];
+          }
+          return acc;
+        }, []);
+
+        setReactions(latestReactions);
+        // Find user's latest reaction if any
+        const userReaction = latestReactions.find(
           (reaction) => reaction.user_id === user?.id
         );
         setUserReaction(userReaction?.reaction_type || null);
@@ -56,7 +73,6 @@ export default function FeedReactions({ feedId }) {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${user?.access_token}`,
           },
         }
       );
@@ -96,9 +112,15 @@ export default function FeedReactions({ feedId }) {
         return;
       }
 
+      // Check if user has any existing reaction
+      const method = userReaction ? "PUT" : "POST";
+      const url = userReaction
+        ? `/api/feed-reactions/${feedId}`
+        : "/api/feed-reactions";
+
       // Add or update reaction
-      const response = await fetch("/api/feed-reactions", {
-        method: "POST",
+      const response = await fetch(url, {
+        method,
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${user.access_token}`,
@@ -144,8 +166,8 @@ export default function FeedReactions({ feedId }) {
           <Image
             src={`/reactions/${type}.svg`}
             alt={type}
-            width={20}
-            height={20}
+            width={30}
+            height={30}
             className={`transition-transform group-hover:scale-110 ${
               userReaction === type ? "scale-110" : ""
             }`}

@@ -49,7 +49,7 @@ FeedReaction.init(
     indexes: [
       {
         unique: true,
-        fields: ['feed_id', 'user_id', 'reaction_type'],
+        fields: ['feed_id', 'user_id'],
       },
     ],
   }

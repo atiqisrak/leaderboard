@@ -14,12 +14,13 @@ const reactionValidation = [
 ];
 
 // Public routes
-router.get('/feed/:feedId', feedReactionController.getFeedReactions);
-router.get('/user/:userId', feedReactionController.getUserReactions);
 router.get('/feed/:feedId/counts', feedReactionController.getReactionCounts);
+router.get('/feed/:feedId', feedReactionController.getFeedReactions);
 
 // Protected routes
-router.post('/', authMiddleware, reactionValidation, validateRequest, feedReactionController.addReaction);
-router.delete('/:feedId/:reactionType', authMiddleware, feedReactionController.removeReaction);
+router.post('/', authMiddleware, reactionValidation, validateRequest, feedReactionController.addOrUpdateReaction);
+router.put('/:feedId', authMiddleware, reactionValidation, validateRequest, feedReactionController.addOrUpdateReaction);
+router.delete('/:feedId', authMiddleware, feedReactionController.removeReaction);
+router.get('/user/:userId', authMiddleware, feedReactionController.getUserReactions);
 
 export default router; 
