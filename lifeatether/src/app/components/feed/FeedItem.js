@@ -10,6 +10,7 @@ import FeedHeader from "./FeedHeader";
 import FeedContent from "./FeedContent";
 import FeedActions from "./FeedActions";
 import FeedReactions from "../reactions/FeedReactions";
+import FeedMetrics from "./FeedMetrics";
 
 export default function FeedItem({ feed, user, onDelete, onEdit, onShare }) {
   const [comments, setComments] = useState([]);
@@ -109,19 +110,24 @@ export default function FeedItem({ feed, user, onDelete, onEdit, onShare }) {
 
       {/* Feed Content with Read More */}
       <div className="mb-4">
-        <p className="text-[#b0b3b8] whitespace-pre-wrap">
-          {showFullContent ? feed.content : feed.content.slice(0, 200)}
-          {feed.content.length > 200 && (
-            <button
-              onClick={() => setShowFullContent(!showFullContent)}
-              className="text-[#FCB813] hover:text-[#ffd34d] ml-2"
-            >
-              {showFullContent ? "Show less" : "Read more..."}
-            </button>
+        <div className="flex flex-col gap-4">
+          {feed.title && (
+            <h3 className="text-white font-semibold">{feed.title}</h3>
           )}
-        </p>
+          <p className="text-[#b0b3b8] whitespace-pre-wrap">
+            {showFullContent ? feed.content : feed.content.slice(0, 200)}
+            {feed.content.length > 200 && (
+              <button
+                onClick={() => setShowFullContent(!showFullContent)}
+                className="text-[#FCB813] hover:text-[#ffd34d] ml-2"
+              >
+                {showFullContent ? "Show less" : "Read more..."}
+              </button>
+            )}
+          </p>
+        </div>
       </div>
-
+      <FeedMetrics feedId={feed.id} />
       {/* Reactions Section */}
       <FeedReactions feedId={feed.id} />
 

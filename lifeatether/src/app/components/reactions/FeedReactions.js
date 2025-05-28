@@ -171,11 +171,11 @@ export default function FeedReactions({ feedId }) {
               userReaction === type ? "scale-110" : ""
             }`}
           />
-          {reactionCounts[type] > 0 && (
+          {/* {reactionCounts[type] > 0 && (
             <span className="text-sm font-medium text-[#b0b3b8] min-w-[20px] text-center">
               {reactionCounts[type]}
             </span>
-          )}
+          )} */}
         </button>
       ))}
       {error && <p className="text-red-500 text-sm">{error}</p>}
