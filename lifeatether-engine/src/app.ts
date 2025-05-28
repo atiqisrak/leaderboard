@@ -21,7 +21,10 @@ const app = express();
 const dashboardController = new DashboardController();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: ['http://188.166.232.67:3099', 'http://localhost:3099', 'http://localhost:3098'],
+  credentials: true
+}));
 app.use(helmet());
 app.use(morgan('dev'));
 app.use(express.json());
