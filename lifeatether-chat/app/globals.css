@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary-color: #fcb813;
+  --secondary-color: #181b20;
+  --text-color: #f3f4f6;
+  --light-text: #b0b3b8;
+  --background: #181b20;
+  --section-bg: #23262b;
+  --card-bg: #23262b;
+}
+
+@layer base {
+  body {
+    @apply bg-[#181b20] text-white font-sans;
+  }
+}
+
+@layer components {
+  .cta-button {
+    @apply inline-flex items-center px-7 py-3 bg-[#FCB813] text-[#181b20] rounded-full font-semibold text-base transition-all hover:bg-[#ffd34d] hover:-translate-y-0.5 shadow-lg;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero,
+.feed,
+.community,
+.about {
+  animation: fadeIn 1s ease-out;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
