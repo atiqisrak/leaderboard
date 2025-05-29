@@ -170,7 +170,7 @@ export async function PUT(request, { params }) {
         {
           success: false,
           message:
-            "Invalid reaction type. Must be one of: like, love, haha, wow, angry",
+            "Invalid reaction type. Must be one of: like, love, haha, wow, angry, sad",
         },
         { status: 400 }
       );

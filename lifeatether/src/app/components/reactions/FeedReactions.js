@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
+import { useFeedReactions } from "../../context/FeedReactionContext";
 import Image from "next/image";
 
 const REACTION_TYPES = ["like", "love", "haha", "wow", "angry", "sad"];
@@ -13,6 +14,7 @@ export default function FeedReactions({ feedId }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const { user } = useAuth();
+  const { updateFeedReactions } = useFeedReactions();
 
   useEffect(() => {
     if (feedId) {
@@ -98,6 +100,7 @@ export default function FeedReactions({ feedId }) {
         if (data.success) {
           setUserReaction(null);
           fetchReactions();
+          updateFeedReactions(feedId);
         }
         return;
       }
@@ -120,6 +123,7 @@ export default function FeedReactions({ feedId }) {
         if (data.success) {
           setUserReaction(reactionType);
           fetchReactions();
+          updateFeedReactions(feedId);
         } else {
           setError(data.message || "Failed to update reaction");
         }
@@ -143,6 +147,7 @@ export default function FeedReactions({ feedId }) {
       if (data.success) {
         setUserReaction(reactionType);
         fetchReactions();
+        updateFeedReactions(feedId);
       } else {
         setError(data.message || "Failed to add reaction");
       }

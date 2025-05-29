@@ -4,30 +4,41 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useFeedReactions } from "../../context/FeedReactionContext";
+
 export default function FeedMetrics({ feedId, user }) {
   const [reactions, setReactions] = useState([]);
   const [reactionsCount, setReactionsCount] = useState(0);
   const [comments, setComments] = useState([]);
   const [commentsCount, setCommentsCount] = useState(0);
   const router = useRouter();
+  const { reactionUpdates } = useFeedReactions();
+
+  const fetchReactions = async () => {
+    const response = await fetch(`/api/feed-reactions/feed/${feedId}`);
+    const data = await response.json();
+    setReactions(data);
+    setReactionsCount(data.reactions.length);
+  };
+
+  const fetchComments = async () => {
+    const response = await fetch(`/api/comments/feed/${feedId}`);
+    const data = await response.json();
+    setComments(data);
+    setCommentsCount(data?.comments?.length);
+  };
+
   useEffect(() => {
-    const fetchReactions = async () => {
-      const response = await fetch(`/api/feed-reactions/feed/${feedId}`);
-      const data = await response.json();
-      setReactions(data);
-      setReactionsCount(data.reactions.length);
-    };
-
-    const fetchComments = async () => {
-      const response = await fetch(`/api/comments/feed/${feedId}`);
-      const data = await response.json();
-      setComments(data);
-      setCommentsCount(data?.comments?.length);
-    };
-
     fetchReactions();
     fetchComments();
   }, [feedId]);
+
+  // Watch for reaction updates
+  useEffect(() => {
+    if (reactionUpdates[feedId]) {
+      fetchReactions();
+    }
+  }, [reactionUpdates, feedId]);
 
   return (
     <div>
