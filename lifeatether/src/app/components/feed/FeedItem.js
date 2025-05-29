@@ -127,64 +127,67 @@ export default function FeedItem({ feed, user, onDelete, onEdit, onShare }) {
           </p>
         </div>
       </div>
-      <FeedMetrics feedId={feed.id} />
+
+      <FeedMetrics feedId={feed.id} user={user} />
       {/* Reactions Section */}
-      <FeedReactions feedId={feed.id} />
+      {user?.access_token && <FeedReactions feedId={feed.id} />}
 
       {/* Comments Section */}
-      <div className="mt-6 border-t border-primary/10 pt-6">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold text-white">Comments</h3>
-          <button
-            onClick={() => setShowCommentBox(!showCommentBox)}
-            className="px-4 py-2 bg-primary text-[#181b20] rounded-lg font-semibold hover:bg-[#ffd34d] transition-colors"
-          >
-            {showCommentBox ? "Cancel" : "Comment"}
-          </button>
-        </div>
-
-        {showCommentBox && (
-          <CommentForm
-            feedId={feed.id}
-            onSubmit={(content) => handleComment(content)}
-          />
-        )}
-
-        {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
-
-        {loading ? (
-          <div className="flex justify-center py-4">
-            <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-primary"></div>
+      {user?.access_token && (
+        <div className="mt-6 border-t border-primary/10 pt-6">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-semibold text-white">Comments</h3>
+            <button
+              onClick={() => setShowCommentBox(!showCommentBox)}
+              className="px-4 py-2 bg-primary text-[#181b20] rounded-lg font-semibold hover:bg-[#ffd34d] transition-colors"
+            >
+              {showCommentBox ? "Cancel" : "Comment"}
+            </button>
           </div>
-        ) : (
-          <>
-            <div className="mt-6 space-y-6">
-              {displayedComments.map((comment) => (
-                <CommentCard
-                  key={comment.id}
-                  comment={comment}
-                  user={user}
-                  onReply={handleComment}
-                  onDelete={handleDeleteComment}
-                  openDropdownId={openDropdownId}
-                  setOpenDropdownId={setOpenDropdownId}
-                />
-              ))}
-            </div>
 
-            {comments.length > 1 && (
-              <button
-                onClick={() => setShowAllComments(!showAllComments)}
-                className="mt-4 text-primary hover:text-[#ffd34d] font-medium"
-              >
-                {showAllComments
-                  ? "Show less comments"
-                  : `Show all comments (${comments.length})`}
-              </button>
-            )}
-          </>
-        )}
-      </div>
+          {showCommentBox && (
+            <CommentForm
+              feedId={feed.id}
+              onSubmit={(content) => handleComment(content)}
+            />
+          )}
+
+          {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+
+          {loading ? (
+            <div className="flex justify-center py-4">
+              <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-primary"></div>
+            </div>
+          ) : (
+            <>
+              <div className="mt-6 space-y-6">
+                {displayedComments.map((comment) => (
+                  <CommentCard
+                    key={comment.id}
+                    comment={comment}
+                    user={user}
+                    onReply={handleComment}
+                    onDelete={handleDeleteComment}
+                    openDropdownId={openDropdownId}
+                    setOpenDropdownId={setOpenDropdownId}
+                  />
+                ))}
+              </div>
+
+              {comments.length > 1 && (
+                <button
+                  onClick={() => setShowAllComments(!showAllComments)}
+                  className="mt-4 text-primary hover:text-[#ffd34d] font-medium"
+                >
+                  {showAllComments
+                    ? "Show less comments"
+                    : `Show all comments (${comments.length})`}
+                </button>
+              )}
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 }

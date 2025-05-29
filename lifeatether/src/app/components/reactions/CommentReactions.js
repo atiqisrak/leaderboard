@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import Image from "next/image";
 
-const REACTION_TYPES = ["like", "love", "haha", "wow", "angry"];
+const REACTION_TYPES = ["like", "love", "haha", "wow", "angry", "sad"];
 
 export default function CommentReactions({ commentId }) {
   const [reactions, setReactions] = useState([]);
@@ -196,18 +196,16 @@ export default function CommentReactions({ commentId }) {
           <button
             key={type}
             onClick={() => handleReaction(type)}
-            className={`relative group flex items-center gap-1 px-2 py-1 rounded-full transition-colors ${
-              userReaction === type ? "bg-primary/20" : "hover:bg-[#23262b]"
-            }`}
+            className={`relative group flex items-center gap-1 px-2 py-1 rounded-full transition-colors ${userReaction === type ? "bg-primary/20" : "hover:bg-[#23262b]"
+              }`}
           >
             <Image
               src={`/reactions/${type}.svg`}
               alt={type}
               width={24}
               height={24}
-              className={`transition-transform group-hover:scale-110 ${
-                userReaction === type ? "scale-110" : ""
-              }`}
+              className={`transition-transform group-hover:scale-110 ${userReaction === type ? "scale-110" : ""
+                }`}
             />
           </button>
         ))}

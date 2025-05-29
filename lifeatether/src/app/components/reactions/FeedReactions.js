@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import Image from "next/image";
 
-const REACTION_TYPES = ["like", "love", "haha", "wow", "angry"];
+const REACTION_TYPES = ["like", "love", "haha", "wow", "angry", "sad"];
 
 export default function FeedReactions({ feedId }) {
   const [reactions, setReactions] = useState([]);
@@ -21,6 +21,11 @@ export default function FeedReactions({ feedId }) {
   }, [feedId]);
 
   const fetchReactions = async () => {
+    if (!user?.access_token) {
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await fetch(`/api/feed-reactions/feed/${feedId}`, {
         headers: {
@@ -74,7 +79,10 @@ export default function FeedReactions({ feedId }) {
   };
 
   const handleReaction = async (reactionType) => {
-    if (!user) return;
+    if (!user?.access_token) {
+      setError("Please login to react");
+      return;
+    }
 
     try {
       // If user already reacted with this type, remove the reaction
@@ -152,24 +160,45 @@ export default function FeedReactions({ feedId }) {
     );
   }
 
+  if (!user?.access_token) {
+    return (
+      <div className="flex items-center gap-2 py-2">
+        {REACTION_TYPES.map((type) => (
+          <button
+            key={type}
+            onClick={() => setError("Please login to react")}
+            className="relative group flex items-center gap-1 px-2 py-1 rounded-full transition-colors hover:bg-[#23262b]"
+          >
+            <Image
+              src={`/reactions/${type}.svg`}
+              alt={type}
+              width={30}
+              height={30}
+              className="transition-transform group-hover:scale-110"
+            />
+          </button>
+        ))}
+        {error && <p className="text-red-500 text-sm">{error}</p>}
+      </div>
+    );
+  }
+
   return (
     <div className="flex items-center gap-2 py-2">
       {REACTION_TYPES.map((type) => (
         <button
           key={type}
           onClick={() => handleReaction(type)}
-          className={`relative group flex items-center gap-1 px-2 py-1 rounded-full transition-colors ${
-            userReaction === type ? "bg-primary/20" : "hover:bg-[#23262b]"
-          }`}
+          className={`relative group flex items-center gap-1 px-2 py-1 rounded-full transition-colors ${userReaction === type ? "bg-primary/20" : "hover:bg-[#23262b]"
+            }`}
         >
           <Image
             src={`/reactions/${type}.svg`}
             alt={type}
             width={30}
             height={30}
-            className={`transition-transform group-hover:scale-110 ${
-              userReaction === type ? "scale-110" : ""
-            }`}
+            className={`transition-transform group-hover:scale-110 ${userReaction === type ? "scale-110" : ""
+              }`}
           />
           {/* {reactionCounts[type] > 0 && (
             <span className="text-sm font-medium text-[#b0b3b8] min-w-[20px] text-center">

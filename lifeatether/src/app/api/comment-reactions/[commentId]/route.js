@@ -23,7 +23,7 @@ export async function POST(request, { params }) {
     }
 
     // Validate reaction type
-    const validReactionTypes = ["like", "love", "haha", "wow", "angry"];
+    const validReactionTypes = ["like", "love", "haha", "wow", "angry", "sad"];
     if (!validReactionTypes.includes(reaction_type)) {
       return NextResponse.json(
         { success: false, message: "Invalid reaction type" },
@@ -94,7 +94,7 @@ export async function DELETE(request, { params }) {
     }
 
     // Validate reaction type
-    const validReactionTypes = ["like", "love", "haha", "wow", "angry"];
+    const validReactionTypes = ["like", "love", "haha", "wow", "angry", "sad"];
     if (!validReactionTypes.includes(reaction_type)) {
       return NextResponse.json(
         { success: false, message: "Invalid reaction type" },
@@ -164,7 +164,7 @@ export async function PUT(request, { params }) {
       );
     }
 
-    const validTypes = ["like", "love", "haha", "wow", "angry"];
+    const validTypes = ["like", "love", "haha", "wow", "angry", "sad"];
     if (!validTypes.includes(reaction_type)) {
       return NextResponse.json(
         {

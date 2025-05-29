@@ -2,13 +2,14 @@
 import { formatDistanceToNow } from "date-fns";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-
-export default function FeedMetrics({ feedId }) {
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+export default function FeedMetrics({ feedId, user }) {
   const [reactions, setReactions] = useState([]);
   const [reactionsCount, setReactionsCount] = useState(0);
   const [comments, setComments] = useState([]);
   const [commentsCount, setCommentsCount] = useState(0);
-
+  const router = useRouter();
   useEffect(() => {
     const fetchReactions = async () => {
       const response = await fetch(`/api/feed-reactions/feed/${feedId}`);
@@ -60,7 +61,21 @@ export default function FeedMetrics({ feedId }) {
         {/* Comments Counts */}
         <div className="flex items-center gap-1">
           <span>
-            {commentsCount} {commentsCount === 1 ? "comment" : "comments"}
+            {user?.access_token ? (
+              <>
+                {commentsCount} {commentsCount === 1 ? "comment" : "comments"}
+              </>
+            ) : (
+              <>
+                <Link
+                  className="text-sm font-medium text-primary"
+                  href="/auth/login"
+                  onClick={() => router.push("/auth/login")}
+                >
+                  Login to comment
+                </Link>
+              </>
+            )}
           </span>
         </div>
       </div>

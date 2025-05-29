@@ -24,7 +24,7 @@ export async function POST(request) {
     }
 
     // Validate reaction type
-    const validReactionTypes = ["like", "love", "haha", "wow", "angry"];
+    const validReactionTypes = ["like", "love", "haha", "wow", "angry", "sad"];
     if (!validReactionTypes.includes(reaction_type)) {
       return NextResponse.json(
         { success: false, message: "Invalid reaction type" },
