@@ -91,7 +91,7 @@ export default function CommentCard({
               ))}
               <button
                 onClick={() => setShowReplies(false)}
-                className="text-[#FCB813] hover:text-[#ffd34d] font-medium"
+                className="text-primary hover:text-[#ffd34d] font-medium"
               >
                 Hide replies
               </button>
@@ -99,7 +99,7 @@ export default function CommentCard({
           ) : (
             <button
               onClick={() => setShowReplies(true)}
-              className="text-[#FCB813] hover:text-[#ffd34d] font-medium"
+              className="text-primary hover:text-[#ffd34d] font-medium"
             >
               Show replies ({comment.replies.length})
             </button>

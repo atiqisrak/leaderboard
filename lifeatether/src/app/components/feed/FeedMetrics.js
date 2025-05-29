@@ -21,7 +21,7 @@ export default function FeedMetrics({ feedId }) {
       const response = await fetch(`/api/comments/feed/${feedId}`);
       const data = await response.json();
       setComments(data);
-      setCommentsCount(data.comments.length);
+      setCommentsCount(data?.comments?.length);
     };
 
     fetchReactions();

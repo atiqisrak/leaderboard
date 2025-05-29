@@ -21,7 +21,7 @@ export default function Home() {
 
       <section id="community" className="py-12 bg-[#23262b] my-8 rounded-2xl">
         <div className="max-w-3xl mx-auto px-6">
-          <h2 className="text-2xl font-bold mb-4 text-[#FCB813]">
+          <h2 className="text-2xl font-bold mb-4 text-primary">
             About Our Community
           </h2>
           <p className="text-[#b0b3b8] text-lg">
@@ -35,7 +35,7 @@ export default function Home() {
 
       <section id="about" className="py-12 bg-[#23262b] my-8 rounded-2xl">
         <div className="max-w-3xl mx-auto px-6">
-          <h2 className="text-2xl font-bold mb-4 text-[#FCB813]">
+          <h2 className="text-2xl font-bold mb-4 text-primary">
             About Life @ EtherTech
           </h2>
           <p className="text-[#b0b3b8] text-lg">
@@ -59,12 +59,12 @@ export default function Home() {
               />
             </div>
             <div>
-              <h4 className="text-[#FCB813] text-lg mb-4">Quick Links</h4>
+              <h4 className="text-primary text-lg mb-4">Quick Links</h4>
               <ul className="space-y-2">
                 <li>
                   <a
                     href="#feed"
-                    className="text-[#b0b3b8] hover:text-[#FCB813] transition-colors"
+                    className="text-[#b0b3b8] hover:text-primary transition-colors"
                   >
                     Feed
                   </a>
@@ -72,7 +72,7 @@ export default function Home() {
                 <li>
                   <a
                     href="#community"
-                    className="text-[#b0b3b8] hover:text-[#FCB813] transition-colors"
+                    className="text-[#b0b3b8] hover:text-primary transition-colors"
                   >
                     Community
                   </a>
@@ -80,7 +80,7 @@ export default function Home() {
                 <li>
                   <a
                     href="#about"
-                    className="text-[#b0b3b8] hover:text-[#FCB813] transition-colors"
+                    className="text-[#b0b3b8] hover:text-primary transition-colors"
                   >
                     About
                   </a>
@@ -88,30 +88,30 @@ export default function Home() {
               </ul>
             </div>
             <div>
-              <h4 className="text-[#FCB813] text-lg mb-4">Connect</h4>
+              <h4 className="text-primary text-lg mb-4">Connect</h4>
               <div className="flex gap-4 text-2xl">
                 <a
                   href="#"
-                  className="text-[#FCB813] hover:text-[#ffd34d] transition-colors"
+                  className="text-primary hover:text-[#ffd34d] transition-colors"
                 >
                   <i className="fab fa-linkedin"></i>
                 </a>
                 <a
                   href="#"
-                  className="text-[#FCB813] hover:text-[#ffd34d] transition-colors"
+                  className="text-primary hover:text-[#ffd34d] transition-colors"
                 >
                   <i className="fab fa-twitter"></i>
                 </a>
                 <a
                   href="#"
-                  className="text-[#FCB813] hover:text-[#ffd34d] transition-colors"
+                  className="text-primary hover:text-[#ffd34d] transition-colors"
                 >
                   <i className="fab fa-instagram"></i>
                 </a>
               </div>
             </div>
           </div>
-          <div className="text-center pt-8 border-t border-[#FCB813]/10">
+          <div className="text-center pt-8 border-t border-primary/10">
             <p className="text-[#b0b3b8] text-sm">
               &copy; 2025 Life @ EtherTech. For the community, by the community.
             </p>

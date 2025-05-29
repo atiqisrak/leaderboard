@@ -119,7 +119,7 @@ export default function FeedItem({ feed, user, onDelete, onEdit, onShare }) {
             {feed.content.length > 200 && (
               <button
                 onClick={() => setShowFullContent(!showFullContent)}
-                className="text-[#FCB813] hover:text-[#ffd34d] ml-2"
+                className="text-primary hover:text-[#ffd34d] ml-2"
               >
                 {showFullContent ? "Show less" : "Read more..."}
               </button>
@@ -132,12 +132,12 @@ export default function FeedItem({ feed, user, onDelete, onEdit, onShare }) {
       <FeedReactions feedId={feed.id} />
 
       {/* Comments Section */}
-      <div className="mt-6 border-t border-[#FCB813]/10 pt-6">
+      <div className="mt-6 border-t border-primary/10 pt-6">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-lg font-semibold text-white">Comments</h3>
           <button
             onClick={() => setShowCommentBox(!showCommentBox)}
-            className="px-4 py-2 bg-[#FCB813] text-[#181b20] rounded-lg font-semibold hover:bg-[#ffd34d] transition-colors"
+            className="px-4 py-2 bg-primary text-[#181b20] rounded-lg font-semibold hover:bg-[#ffd34d] transition-colors"
           >
             {showCommentBox ? "Cancel" : "Comment"}
           </button>
@@ -154,7 +154,7 @@ export default function FeedItem({ feed, user, onDelete, onEdit, onShare }) {
 
         {loading ? (
           <div className="flex justify-center py-4">
-            <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-[#FCB813]"></div>
+            <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-primary"></div>
           </div>
         ) : (
           <>
@@ -175,7 +175,7 @@ export default function FeedItem({ feed, user, onDelete, onEdit, onShare }) {
             {comments.length > 1 && (
               <button
                 onClick={() => setShowAllComments(!showAllComments)}
-                className="mt-4 text-[#FCB813] hover:text-[#ffd34d] font-medium"
+                className="mt-4 text-primary hover:text-[#ffd34d] font-medium"
               >
                 {showAllComments
                   ? "Show less comments"

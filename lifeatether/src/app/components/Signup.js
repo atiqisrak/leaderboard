@@ -92,7 +92,7 @@ export default function Signup({ isModal = true }) {
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full px-4 py-2 bg-[#181b20] border border-[#FCB813]/20 rounded-lg text-white focus:outline-none focus:border-[#FCB813]"
+              className="w-full px-4 py-2 bg-[#181b20] border border-primary/20 rounded-lg text-white focus:outline-none focus:border-primary"
               required
               disabled={isLoading}
             />
@@ -109,7 +109,7 @@ export default function Signup({ isModal = true }) {
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 bg-[#181b20] border border-[#FCB813]/20 rounded-lg text-white focus:outline-none focus:border-[#FCB813]"
+              className="w-full px-4 py-2 bg-[#181b20] border border-primary/20 rounded-lg text-white focus:outline-none focus:border-primary"
               required
               disabled={isLoading}
             />
@@ -126,7 +126,7 @@ export default function Signup({ isModal = true }) {
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 bg-[#181b20] border border-[#FCB813]/20 rounded-lg text-white focus:outline-none focus:border-[#FCB813]"
+              className="w-full px-4 py-2 bg-[#181b20] border border-primary/20 rounded-lg text-white focus:outline-none focus:border-primary"
               required
               disabled={isLoading}
             />
@@ -141,7 +141,7 @@ export default function Signup({ isModal = true }) {
           {error && <p className="text-red-500 text-sm">{error}</p>}
           <button
             type="submit"
-            className="w-full bg-[#FCB813] text-[#181b20] py-2 rounded-lg font-semibold hover:bg-[#ffd34d] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-primary text-[#181b20] py-2 rounded-lg font-semibold hover:bg-[#ffd34d] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={isLoading}
           >
             {isLoading ? "Signing up..." : "Sign Up"}
@@ -150,7 +150,7 @@ export default function Signup({ isModal = true }) {
         <div className="flex justify-center mt-4">
           <p className="text-sm text-[#b0b3b8]">
             Already have an account?{" "}
-            <Link href="/auth/login" className="text-[#FCB813]">
+            <Link href="/auth/login" className="text-primary">
               Login
             </Link>
           </p>

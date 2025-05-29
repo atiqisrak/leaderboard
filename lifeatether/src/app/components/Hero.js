@@ -29,7 +29,7 @@ export default function Hero({ onPostCreated }) {
     <>
       <section className="pt-32 pb-12 text-center bg-[#181b20]">
         <div className="max-w-3xl mx-auto px-6">
-          <h1 className="text-5xl font-bold mb-4 text-[#FCB813]">
+          <h1 className="text-5xl font-bold mb-4 text-primary">
             Life @ EtherTech
           </h1>
           <p className="text-xl text-[#b0b3b8] mb-8">
@@ -37,7 +37,7 @@ export default function Hero({ onPostCreated }) {
           </p>
           <button
             onClick={handleSharePost}
-            className="inline-flex items-center px-7 py-3 bg-[#FCB813] text-[#181b20] rounded-full font-semibold text-base transition-all hover:bg-[#ffd34d] hover:-translate-y-0.5 shadow-lg"
+            className="inline-flex items-center px-7 py-3 bg-primary text-[#181b20] rounded-full font-semibold text-base transition-all hover:bg-[#ffd34d] hover:-translate-y-0.5 shadow-lg"
           >
             <i className="fas fa-plus mr-2"></i>
             Share a Post

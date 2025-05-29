@@ -155,7 +155,7 @@ export default function CommentReactions({ commentId }) {
   if (loading) {
     return (
       <div className="flex justify-center py-2">
-        <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-[#FCB813]"></div>
+        <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-primary"></div>
       </div>
     );
   }
@@ -197,7 +197,7 @@ export default function CommentReactions({ commentId }) {
             key={type}
             onClick={() => handleReaction(type)}
             className={`relative group flex items-center gap-1 px-2 py-1 rounded-full transition-colors ${
-              userReaction === type ? "bg-[#FCB813]/20" : "hover:bg-[#23262b]"
+              userReaction === type ? "bg-primary/20" : "hover:bg-[#23262b]"
             }`}
           >
             <Image

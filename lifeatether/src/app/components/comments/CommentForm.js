@@ -78,7 +78,7 @@ export default function CommentForm({
         onChange={(e) => setContent(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder="Write a comment..."
-        className="w-full px-4 py-2 bg-[#23262b] border border-[#FCB813]/20 rounded-lg text-white focus:outline-none focus:border-[#FCB813] h-24 resize-none"
+        className="w-full px-4 py-2 bg-[#23262b] border border-primary/20 rounded-lg text-white focus:outline-none focus:border-primary h-24 resize-none"
       />
       {error && <p className="text-red-500 text-sm">{error}</p>}
       <div className="flex justify-end gap-2">
@@ -93,7 +93,7 @@ export default function CommentForm({
         )}
         <button
           type="submit"
-          className="px-4 py-2 bg-[#FCB813] text-[#181b20] rounded-lg font-semibold hover:bg-[#ffd34d] transition-colors"
+          className="px-4 py-2 bg-primary text-[#181b20] rounded-lg font-semibold hover:bg-[#ffd34d] transition-colors"
         >
           {parentCommentId ? "Reply" : "Comment"}
         </button>

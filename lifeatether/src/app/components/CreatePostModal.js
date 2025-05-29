@@ -63,7 +63,7 @@ export default function CreatePostModal({ isOpen, onClose, onSubmit }) {
               id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-4 py-2 bg-[#181b20] border border-[#FCB813]/20 rounded-lg text-white focus:outline-none focus:border-[#FCB813]"
+              className="w-full px-4 py-2 bg-[#181b20] border border-primary/20 rounded-lg text-white focus:outline-none focus:border-primary"
               required
             />
           </div>
@@ -78,7 +78,7 @@ export default function CreatePostModal({ isOpen, onClose, onSubmit }) {
               id="content"
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              className="w-full px-4 py-2 bg-[#181b20] border border-[#FCB813]/20 rounded-lg text-white focus:outline-none focus:border-[#FCB813] h-32 resize-none"
+              className="w-full px-4 py-2 bg-[#181b20] border border-primary/20 rounded-lg text-white focus:outline-none focus:border-primary h-32 resize-none"
               required
             />
           </div>
@@ -93,7 +93,7 @@ export default function CreatePostModal({ isOpen, onClose, onSubmit }) {
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-[#FCB813] text-[#181b20] rounded-lg font-semibold hover:bg-[#ffd34d] transition-colors"
+              className="px-4 py-2 bg-primary text-[#181b20] rounded-lg font-semibold hover:bg-[#ffd34d] transition-colors"
             >
               Post
             </button>
