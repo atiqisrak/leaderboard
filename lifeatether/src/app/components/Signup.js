@@ -22,7 +22,6 @@ export default function Signup({ isModal = true }) {
     setIsLoading(true);
 
     try {
-      console.log("Submitting registration form");
       const response = await fetch("/api/users/register", {
         method: "POST",
         headers: {
@@ -37,17 +36,12 @@ export default function Signup({ isModal = true }) {
       });
 
       const data = await response.json();
-      console.log("Registration response:", {
-        ...data,
-        user: data.user ? { ...data.user, password: "[REDACTED]" } : null,
-      });
 
       if (!response.ok) {
         throw new Error(data.message || "Registration failed");
       }
 
       if (data.success && data.user && data.user.access_token) {
-        console.log("Registration successful, logging in user");
         const loginSuccess = await login(email, password);
         if (!loginSuccess) {
           throw new Error("Registration successful but login failed");

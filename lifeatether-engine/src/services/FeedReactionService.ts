@@ -55,9 +55,7 @@ export class FeedReactionService {
     });
   }
 
-  async getReactionCounts(feedId: number) {
-    console.log('Getting reaction counts for feed:', feedId);
-    
+  async getReactionCounts(feedId: number) {    
     // First, get all reactions for the feed
     const allReactions = await FeedReaction.findAll({
       where: { feed_id: feedId },
@@ -84,8 +82,6 @@ export class FeedReactionService {
       reaction_type,
       count: count.toString()
     }));
-
-    console.log('Count results:', result);
     return result;
   }
 

@@ -33,6 +33,16 @@ export class UserController {
 
       const options: SignOptions = { expiresIn: config.jwt.expiresIn as jwt.SignOptions['expiresIn'] };
       const token = jwt.sign({ id: user.id }, config.jwt.secret as Secret, options);
+      
+      // Set cookie with appropriate options
+      res.cookie('token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production', // Only use secure in production
+        sameSite: 'lax',
+        maxAge: 24 * 60 * 60 * 1000, // 24 hours
+        path: '/'
+      });
+
       res.json({ user, token });
     } catch (error: any) {
       res.status(400).json({ error: error.message });

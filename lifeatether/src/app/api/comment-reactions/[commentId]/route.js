@@ -101,8 +101,6 @@ export async function DELETE(request, { params }) {
         { status: 400 }
       );
     }
-
-    console.log(`Deleting reaction ${reaction_type} for comment ${commentId}`);
     const response = await fetch(
       `${BASE_URL}/comment-reactions/${commentId}/${reaction_type}`,
       {
@@ -178,9 +176,6 @@ export async function PUT(request, { params }) {
       );
     }
 
-    console.log("Updating reaction for comment:", commentId);
-    console.log("API URL:", `${BASE_URL}/comment-reactions/${commentId}`);
-
     const response = await fetch(`${BASE_URL}/comment-reactions/${commentId}`, {
       method: "PUT",
       headers: {
@@ -193,7 +188,6 @@ export async function PUT(request, { params }) {
     });
 
     const data = await response.json();
-    console.log("Backend response:", data);
 
     if (!response.ok) {
       console.error("Backend error:", data);

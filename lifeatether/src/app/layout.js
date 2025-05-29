@@ -1,6 +1,7 @@
 import localFont from "next/font/local";
 import "./globals.css";
 import { AuthProvider } from "./context/AuthContext";
+import CookieConsent from "./components/CookieConsent";
 
 const inter = localFont({
   src: "./fonts/Inter/Inter-VariableFont_opsz,wght.ttf",
@@ -26,7 +27,10 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className={`${inter.variable} font-sans antialiased`}>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          {children}
+          <CookieConsent />
+        </AuthProvider>
       </body>
     </html>
   );

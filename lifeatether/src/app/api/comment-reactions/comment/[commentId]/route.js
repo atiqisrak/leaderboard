@@ -13,13 +13,6 @@ export async function GET(request, { params }) {
         { status: 401 }
       );
     }
-
-    console.log("Fetching reactions for comment:", commentId);
-    console.log(
-      "API URL:",
-      `${API_URL}/comment-reactions/comment/${commentId}`
-    );
-
     const response = await fetch(
       `${API_URL}/comment-reactions/comment/${commentId}`,
       {
@@ -30,7 +23,6 @@ export async function GET(request, { params }) {
     );
 
     const data = await response.json();
-    console.log("Backend response:", data);
 
     if (!response.ok) {
       console.error("Backend error:", data);

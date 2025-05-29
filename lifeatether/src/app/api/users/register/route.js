@@ -6,7 +6,6 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 export async function POST(request) {
   try {
     const { name, email, password, role } = await request.json();
-    console.log("Registration request:", { name, email, role });
 
     const response = await fetch(`${BASE_URL}/users/register`, {
       method: "POST",
@@ -17,7 +16,6 @@ export async function POST(request) {
     });
 
     const data = await response.json();
-    console.log("Registration response:", data);
 
     if (!response.ok) {
       console.error("Registration failed:", data);
@@ -28,7 +26,6 @@ export async function POST(request) {
     }
 
     // After successful registration, get the token by logging in
-    console.log("Attempting login after registration");
     const loginResponse = await fetch(`${BASE_URL}/users/login`, {
       method: "POST",
       headers: {
@@ -38,7 +35,6 @@ export async function POST(request) {
     });
 
     const loginData = await loginResponse.json();
-    console.log("Login response:", loginData);
 
     if (!loginResponse.ok) {
       console.error("Login after registration failed:", loginData);
@@ -53,8 +49,6 @@ export async function POST(request) {
       ...data.user,
       access_token: loginData.token,
     };
-
-    console.log("Final user data:", { ...userData, password: "[REDACTED]" });
 
     // Store user data in a cookie
     cookies().set("user", JSON.stringify(userData), {

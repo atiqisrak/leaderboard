@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
 import { config } from './config/config';
 import { errorHandler } from './middlewares/errorHandler';
 import { authMiddleware } from './middlewares/authMiddleware';
@@ -22,13 +23,16 @@ const dashboardController = new DashboardController();
 
 // Middleware
 app.use(cors({
-  origin: ['http://188.166.232.67:3099', 'http://localhost:3099', 'http://localhost:3098'],
-  credentials: true
+  origin: ['http://0.0.0.0:3099', 'http://0.0.0.0:3098', 'http://127.0.0.1:3099', 'http://188.166.232.67:3099'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(helmet());
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 // View engine setup
 app.set('view engine', 'ejs');
@@ -56,7 +60,7 @@ app.use(errorHandler);
 // Start server
 const PORT = config.port || 3000;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
 
 export default app; 
