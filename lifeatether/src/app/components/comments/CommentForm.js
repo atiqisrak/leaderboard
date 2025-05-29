@@ -93,7 +93,7 @@ export default function CommentForm({
         )}
         <button
           type="submit"
-          className="px-4 py-2 bg-primary text-[#181b20] rounded-lg font-semibold hover:bg-[#ffd34d] transition-colors"
+          className="px-4 py-2 bg-primary text-secondary rounded-lg font-semibold hover:bg-[#ffd34d] transition-colors"
         >
           {parentCommentId ? "Reply" : "Comment"}
         </button>

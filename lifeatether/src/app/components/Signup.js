@@ -68,7 +68,7 @@ export default function Signup({ isModal = true }) {
 
   const containerClasses = isModal
     ? "fixed inset-0 bg-black/50 flex items-center justify-center z-50"
-    : "min-h-screen bg-[#181b20] flex items-center justify-center p-4";
+    : "min-h-screen bg-secondary flex items-center justify-center p-4";
 
   return (
     <div className={containerClasses}>
@@ -97,7 +97,7 @@ export default function Signup({ isModal = true }) {
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full px-4 py-2 bg-[#181b20] border border-primary/20 rounded-lg text-white focus:outline-none focus:border-primary"
+              className="w-full px-4 py-2 bg-secondary border border-primary/20 rounded-lg text-white focus:outline-none focus:border-primary"
               required
               disabled={isLoading}
             />
@@ -115,7 +115,7 @@ export default function Signup({ isModal = true }) {
                 id="email"
                 value={emailPrefix}
                 onChange={(e) => setEmailPrefix(e.target.value)}
-                className="flex-1 px-4 py-2 bg-[#181b20] border border-primary/20 rounded-lg text-white focus:outline-none focus:border-primary"
+                className="flex-1 px-4 py-2 bg-secondary border border-primary/20 rounded-lg text-white focus:outline-none focus:border-primary"
                 required
                 disabled={isLoading}
                 placeholder="username"
@@ -124,7 +124,7 @@ export default function Signup({ isModal = true }) {
               <select
                 value={selectedDomain}
                 onChange={(e) => setSelectedDomain(e.target.value)}
-                className="px-4 py-2 bg-[#181b20] border border-primary/20 rounded-lg text-white focus:outline-none focus:border-primary"
+                className="px-4 py-2 bg-secondary border border-primary/20 rounded-lg text-white focus:outline-none focus:border-primary"
                 disabled={isLoading}
               >
                 {ALLOWED_DOMAINS.map((domain) => (
@@ -148,7 +148,7 @@ export default function Signup({ isModal = true }) {
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-2 bg-[#181b20] border border-primary/20 rounded-lg text-white focus:outline-none focus:border-primary"
+                className="w-full px-4 py-2 bg-secondary border border-primary/20 rounded-lg text-white focus:outline-none focus:border-primary"
                 required
                 disabled={isLoading}
               />
@@ -199,7 +199,7 @@ export default function Signup({ isModal = true }) {
           {error && <p className="text-red-500 text-sm">{error}</p>}
           <button
             type="submit"
-            className="w-full bg-primary text-[#181b20] py-2 rounded-lg font-semibold hover:bg-[#ffd34d] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-primary text-secondary py-2 rounded-lg font-semibold hover:bg-[#ffd34d] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={isLoading}
           >
             {isLoading ? "Signing up..." : "Sign Up"}

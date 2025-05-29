@@ -14,7 +14,7 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-[#181b20] text-white">
+    <main className="min-h-screen bg-secondary text-white">
       <Navbar />
       <Hero onPostCreated={handlePostCreated} />
       <Feed key={refreshTrigger} />
@@ -46,7 +46,7 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="bg-[#181b20] py-12 mt-8">
+      <footer className="bg-secondary py-12 mt-8">
         <div className="max-w-3xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
             <div>

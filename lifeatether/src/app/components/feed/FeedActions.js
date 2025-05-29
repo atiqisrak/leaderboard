@@ -39,7 +39,7 @@ export default function FeedActions({ feed, user, onDelete, onEdit, onShare }) {
         </svg>
       </button>
       {isDropdownOpen && (
-        <div className="absolute right-0 mt-2 w-48 bg-[#181b20] rounded-lg shadow-lg py-1 z-10">
+        <div className="absolute right-0 mt-2 w-48 bg-secondary rounded-lg shadow-lg py-1 z-10">
           <button
             onClick={() => {
               onEdit(feed);

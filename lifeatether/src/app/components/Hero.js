@@ -27,7 +27,7 @@ export default function Hero({ onPostCreated }) {
 
   return (
     <>
-      <section className="pt-32 pb-12 text-center bg-[#181b20]">
+      <section className="pt-32 pb-12 text-center bg-secondary">
         <div className="max-w-3xl mx-auto px-6">
           <h1 className="text-5xl font-bold mb-4 text-primary">
             Life @ EtherTech
@@ -37,7 +37,7 @@ export default function Hero({ onPostCreated }) {
           </p>
           <button
             onClick={handleSharePost}
-            className="inline-flex items-center px-7 py-3 bg-primary text-[#181b20] rounded-full font-semibold text-base transition-all hover:bg-[#ffd34d] hover:-translate-y-0.5 shadow-lg"
+            className="inline-flex items-center px-7 py-3 bg-primary text-secondary rounded-full font-semibold text-base transition-all hover:bg-[#ffd34d] hover:-translate-y-0.5 shadow-lg"
           >
             <i className="fas fa-plus mr-2"></i>
             Share a Post

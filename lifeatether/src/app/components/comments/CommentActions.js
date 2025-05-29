@@ -34,7 +34,7 @@ export default function CommentActions({
         </svg>
       </button>
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-48 bg-[#181b20] rounded-lg shadow-lg py-1 z-10">
+        <div className="absolute right-0 mt-2 w-48 bg-secondary rounded-lg shadow-lg py-1 z-10">
           <button
             onClick={() => {
               onReply();

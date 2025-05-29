@@ -32,7 +32,7 @@ export default function CommentCard({
           />
         </div>
         <div className="flex-grow">
-          <div className="bg-[#181b20] rounded-lg p-4">
+          <div className="bg-secondary rounded-lg p-4">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
                 <h4 className="text-white font-semibold">

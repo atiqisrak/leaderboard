@@ -39,7 +39,7 @@ export default function Login({ isModal = true }) {
 
   const containerClasses = isModal
     ? "fixed inset-0 bg-black/50 flex items-center justify-center z-50"
-    : "min-h-screen bg-[#181b20] flex items-center justify-center p-4";
+    : "min-h-screen bg-secondary flex items-center justify-center p-4";
 
   return (
     <div className={containerClasses}>
@@ -68,7 +68,7 @@ export default function Login({ isModal = true }) {
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 bg-[#181b20] border border-primary/20 rounded-lg text-white focus:outline-none focus:border-primary"
+              className="w-full px-4 py-2 bg-secondary border border-primary/20 rounded-lg text-white focus:outline-none focus:border-primary"
               required
             />
           </div>
@@ -84,14 +84,14 @@ export default function Login({ isModal = true }) {
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 bg-[#181b20] border border-primary/20 rounded-lg text-white focus:outline-none focus:border-primary"
+              className="w-full px-4 py-2 bg-secondary border border-primary/20 rounded-lg text-white focus:outline-none focus:border-primary"
               required
             />
           </div>
           {error && <p className="text-red-500 text-sm">{error}</p>}
           <button
             type="submit"
-            className="w-full bg-primary text-[#181b20] py-2 rounded-lg font-semibold hover:bg-[#ffd34d] transition-colors"
+            className="w-full bg-primary text-secondary py-2 rounded-lg font-semibold hover:bg-[#ffd34d] transition-colors"
           >
             Login
           </button>

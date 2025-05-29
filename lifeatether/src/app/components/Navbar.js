@@ -68,7 +68,7 @@ export default function Navbar() {
             <li>
               <Link
                 href="#feed"
-                className="text-white hover:bg-primary hover:text-[#181b20] px-3 py-1 rounded-full transition-colors"
+                className="text-white hover:bg-primary hover:text-secondary px-3 py-1 rounded-full transition-colors"
               >
                 Feed
               </Link>
@@ -76,7 +76,7 @@ export default function Navbar() {
             <li>
               <Link
                 href="#community"
-                className="text-white hover:bg-primary hover:text-[#181b20] px-3 py-1 rounded-full transition-colors"
+                className="text-white hover:bg-primary hover:text-secondary px-3 py-1 rounded-full transition-colors"
               >
                 Community
               </Link>
@@ -84,7 +84,7 @@ export default function Navbar() {
             <li>
               <Link
                 href="#about"
-                className="text-white hover:bg-primary hover:text-[#181b20] px-3 py-1 rounded-full transition-colors"
+                className="text-white hover:bg-primary hover:text-secondary px-3 py-1 rounded-full transition-colors"
               >
                 About
               </Link>
@@ -93,14 +93,14 @@ export default function Navbar() {
           {user ? (
             <button
               onClick={logout}
-              className="bg-primary text-[#181b20] px-4 py-2 rounded-lg font-semibold hover:bg-[#ffd34d] transition-colors"
+              className="bg-primary text-secondary px-4 py-2 rounded-lg font-semibold hover:bg-[#ffd34d] transition-colors"
             >
               Logout
             </button>
           ) : (
             <button
               onClick={handleLogin}
-              className="bg-primary text-[#181b20] px-4 py-2 rounded-lg font-semibold hover:bg-[#ffd34d] transition-colors"
+              className="bg-primary text-secondary px-4 py-2 rounded-lg font-semibold hover:bg-[#ffd34d] transition-colors"
             >
               Login
             </button>
@@ -110,9 +110,8 @@ export default function Navbar() {
 
       {/* Mobile Menu - Moved outside the container div */}
       <div
-        className={`lg:hidden absolute left-0 right-0 bg-[#23262b] shadow-lg transition-all duration-300 ease-in-out ${
-          isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
-        }`}
+        className={`lg:hidden absolute left-0 right-0 bg-[#23262b] shadow-lg transition-all duration-300 ease-in-out ${isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
+          }`}
         style={{ top: "100%" }}
       >
         <div className="px-6 py-4 space-y-4">
@@ -120,7 +119,7 @@ export default function Navbar() {
             <li>
               <Link
                 href="#feed"
-                className="block text-white hover:bg-primary hover:text-[#181b20] px-3 py-2 rounded-lg transition-colors"
+                className="block text-white hover:bg-primary hover:text-secondary px-3 py-2 rounded-lg transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Feed
@@ -129,7 +128,7 @@ export default function Navbar() {
             <li>
               <Link
                 href="#community"
-                className="block text-white hover:bg-primary hover:text-[#181b20] px-3 py-2 rounded-lg transition-colors"
+                className="block text-white hover:bg-primary hover:text-secondary px-3 py-2 rounded-lg transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Community
@@ -138,7 +137,7 @@ export default function Navbar() {
             <li>
               <Link
                 href="#about"
-                className="block text-white hover:bg-primary hover:text-[#181b20] px-3 py-2 rounded-lg transition-colors"
+                className="block text-white hover:bg-primary hover:text-secondary px-3 py-2 rounded-lg transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 About
@@ -152,7 +151,7 @@ export default function Navbar() {
                   logout();
                   setIsMenuOpen(false);
                 }}
-                className="w-full bg-primary text-[#181b20] px-4 py-2 rounded-lg font-semibold hover:bg-[#ffd34d] transition-colors"
+                className="w-full bg-primary text-secondary px-4 py-2 rounded-lg font-semibold hover:bg-[#ffd34d] transition-colors"
               >
                 Logout
               </button>
@@ -162,7 +161,7 @@ export default function Navbar() {
                   handleLogin();
                   setIsMenuOpen(false);
                 }}
-                className="w-full bg-primary text-[#181b20] px-4 py-2 rounded-lg font-semibold hover:bg-[#ffd34d] transition-colors"
+                className="w-full bg-primary text-secondary px-4 py-2 rounded-lg font-semibold hover:bg-[#ffd34d] transition-colors"
               >
                 Login
               </button>
