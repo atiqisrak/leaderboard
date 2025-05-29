@@ -27,5 +27,6 @@ router.post('/login', loginValidation, validateRequest, userController.login);
 router.get('/profile', authMiddleware, userController.getProfile);
 router.put('/profile', authMiddleware, userController.updateProfile);
 router.get('/search', authMiddleware, userController.searchUsers);
+router.get('/all-names', authMiddleware, userController.getAllUserNames);
 
 export default router; 

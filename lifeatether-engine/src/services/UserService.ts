@@ -42,4 +42,11 @@ export class UserService {
       }
     });
   }
+
+  async getAllUserNames() {
+    return User.findAll({
+      attributes: ['id', 'name'],
+      order: [['name', 'ASC']]
+    });
+  }
 } 

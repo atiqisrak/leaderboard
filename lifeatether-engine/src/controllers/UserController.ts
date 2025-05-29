@@ -87,4 +87,13 @@ export class UserController {
       res.status(400).json({ error: error.message });
     }
   };
+
+  getAllUserNames = async (req: Request, res: Response) => {
+    try {
+      const users = await this.userService.getAllUserNames();
+      res.json(users);
+    } catch (error: any) {
+      res.status(400).json({ error: error.message });
+    }
+  };
 } 
