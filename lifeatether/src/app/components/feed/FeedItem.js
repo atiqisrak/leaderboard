@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { formatDistanceToNow } from "date-fns";
 import Image from "next/image";
+import Link from "next/link";
 import { useAuth } from "../../context/AuthContext";
 import CommentCard from "../comments/CommentCard";
 import CommentForm from "../comments/CommentForm";
@@ -92,11 +93,34 @@ export default function FeedItem({ feed, user, onDelete, onEdit, onShare }) {
     }
   };
 
+  const renderContent = (content) => {
+    if (!content) return null;
+
+    // Split content by @mentions
+    const parts = content.split(/(@\w+)/g);
+
+    return parts.map((part, index) => {
+      if (part.startsWith('@')) {
+        const username = part.slice(1);
+        return (
+          <Link
+            key={index}
+            href={`/profile/${username}`}
+            className="text-primary hover:text-[#ffd34d] font-medium"
+          >
+            {part}
+          </Link>
+        );
+      }
+      return part;
+    });
+  };
+
   // Get the last comment if not showing all comments
   const displayedComments = showAllComments ? comments : comments.slice(-1);
 
   return (
-    <div className="bg-[#23262b] rounded-xl p-6 shadow-lg">
+    <div className="bg-[#23262b] rounded-xl p-4 shadow-lg">
       <div className="flex justify-between items-center mb-4">
         <FeedHeader feed={feed} user={user} />
         <FeedActions
@@ -115,7 +139,7 @@ export default function FeedItem({ feed, user, onDelete, onEdit, onShare }) {
             <h3 className="text-white font-semibold">{feed.title}</h3>
           )}
           <p className="text-[#b0b3b8] whitespace-pre-wrap">
-            {showFullContent ? feed.content : feed.content.slice(0, 200)}
+            {showFullContent ? renderContent(feed.content) : renderContent(feed.content.slice(0, 200))}
             {feed.content.length > 200 && (
               <button
                 onClick={() => setShowFullContent(!showFullContent)}
@@ -136,7 +160,15 @@ export default function FeedItem({ feed, user, onDelete, onEdit, onShare }) {
       {user?.access_token && (
         <div className="mt-6 border-t border-primary/10 pt-6">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="text-lg font-semibold text-white">Comments</h3>
+            {
+              comments.length > 0 ? (
+                <>
+                  <h3 className="text-lg font-semibold text-white">Comments</h3>
+                </>
+              ) : (
+                <h3 className="text-lg font-semibold text-white">Be the first to comment</h3>
+              )
+            }
             <button
               onClick={() => setShowCommentBox(!showCommentBox)}
               className="px-4 py-2 bg-primary text-secondary rounded-lg font-semibold hover:bg-[#ffd34d] transition-colors"

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import Image from "next/image";
+import Link from "next/link";
 import CommentForm from "./CommentForm";
 import CommentActions from "./CommentActions";
 import CommentReactions from "../reactions/CommentReactions";
@@ -19,6 +20,29 @@ export default function CommentCard({
   const [showReplies, setShowReplies] = useState(false);
 
   const hasReplies = comment.replies && comment.replies.length > 0;
+
+  const renderContent = (content) => {
+    if (!content) return null;
+
+    // Split content by @mentions
+    const parts = content.split(/(@\w+)/g);
+
+    return parts.map((part, index) => {
+      if (part.startsWith('@')) {
+        const username = part.slice(1);
+        return (
+          <Link
+            key={index}
+            href={`/profile/${username}`}
+            className="text-primary hover:text-[#ffd34d] font-medium"
+          >
+            {part}
+          </Link>
+        );
+      }
+      return part;
+    });
+  };
 
   return (
     <div className="space-y-4">
@@ -53,7 +77,7 @@ export default function CommentCard({
                 setOpenDropdownId={setOpenDropdownId}
               />
             </div>
-            <p className="text-[#b0b3b8]">{comment.content}</p>
+            <p className="text-[#b0b3b8]">{renderContent(comment.content)}</p>
             <div className="mt-2">
               <CommentReactions commentId={comment.id} />
             </div>

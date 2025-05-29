@@ -22,11 +22,11 @@ const loginValidation = [
 // Public routes
 router.post('/register', registerValidation, validateRequest, userController.register);
 router.post('/login', loginValidation, validateRequest, userController.login);
+router.get('/all-names', userController.getAllUserNames);
 
 // Protected routes
 router.get('/profile', authMiddleware, userController.getProfile);
 router.put('/profile', authMiddleware, userController.updateProfile);
 router.get('/search', authMiddleware, userController.searchUsers);
-router.get('/all-names', authMiddleware, userController.getAllUserNames);
 
 export default router; 

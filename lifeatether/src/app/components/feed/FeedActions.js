@@ -14,7 +14,7 @@ export default function FeedActions({ feed, user, onDelete, onEdit, onShare }) {
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
-  if (!user || (user.id !== feed.author.id && user.role !== "admin")) {
+  if (!user || (user.id !== feed?.author?.id && user.role !== "admin")) {
     return null;
   }
 

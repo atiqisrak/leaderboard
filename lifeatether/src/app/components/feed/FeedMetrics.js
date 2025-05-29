@@ -48,26 +48,32 @@ export default function FeedMetrics({ feedId, user }) {
           {/* <span>
             {reactionsCount} {reactionsCount === 1 ? "reaction" : "reactions"}
           </span> */}
-          <div className="flex items-center gap-1">
-            <div className="flex -space-x-1">
-              {reactions?.reactions &&
-                reactions?.reactions.length > 0 &&
-                reactions?.reactions?.map((reaction) => (
-                  <div key={reaction.id} className="relative">
-                    <Image
-                      src={`/reactions/${reaction.reaction_type}.svg`}
-                      alt={reaction.reaction_type}
-                      width={20}
-                      height={20}
-                      className="rounded-full border border-[#23262b]"
-                    />
-                  </div>
-                ))}
+          {user?.access_token && (
+            <div className="flex items-center gap-1">
+              <div className="flex -space-x-1">
+                {reactions?.reactions &&
+                  reactions?.reactions.length > 0 &&
+                  reactions?.reactions?.map((reaction) => (
+                    <div key={reaction.id} className="relative">
+                      <Image
+                        src={`/reactions/${reaction.reaction_type}.svg`}
+                        alt={reaction.reaction_type}
+                        width={20}
+                        height={20}
+                        className="rounded-full border border-[#23262b]"
+                      />
+                    </div>
+                  ))}
+              </div>
+              {
+                reactionsCount > 0 && (
+                  <span className="text-sm font-medium text-[#b0b3b8]">
+                    {reactionsCount} {reactionsCount === 1 ? "reaction" : "reactions"}
+                  </span>
+                )
+              }
             </div>
-            <span className="text-sm font-medium text-[#b0b3b8]">
-              {reactionsCount}
-            </span>
-          </div>
+          )}
         </div>
         {/* Comments Counts */}
         <div className="flex items-center gap-1">

@@ -91,9 +91,15 @@ export class UserController {
   getAllUserNames = async (req: Request, res: Response) => {
     try {
       const users = await this.userService.getAllUserNames();
-      res.json(users);
+      // Ensure we return only id and name
+      const formattedUsers = users.map(user => ({
+        id: user.id,
+        name: user.name
+      }));
+      res.json(formattedUsers);
     } catch (error: any) {
-      res.status(400).json({ error: error.message });
+      console.error('Error in getAllUserNames:', error);
+      res.status(500).json({ error: error.message || 'Failed to fetch users' });
     }
   };
 } 

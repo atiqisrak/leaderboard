@@ -5,13 +5,16 @@ import { useAuth } from "../context/AuthContext";
 import { useRouter } from "next/navigation";
 import FeedItem from "./feed/FeedItem";
 import DeleteFeedModal from "./feed/DeleteFeedModal";
+import EditFeedModal from "./feed/EditFeedModal";
 
 export default function Feed() {
   const [feeds, setFeeds] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
   const [feedToDelete, setFeedToDelete] = useState(null);
+  const [feedToEdit, setFeedToEdit] = useState(null);
   const { user } = useAuth();
   const router = useRouter();
 
@@ -71,7 +74,19 @@ export default function Feed() {
   };
 
   const handleEdit = (feed) => {
-    // TODO: Implement edit functionality
+    setFeedToEdit({
+      id: feed.id,
+      title: feed.title,
+      content: feed.content,
+      author: feed.author
+    });
+    setEditModalOpen(true);
+  };
+
+  const handleEditSave = (updatedFeed) => {
+    setFeeds(feeds.map((feed) =>
+      feed.id === updatedFeed.id ? updatedFeed : feed
+    ));
   };
 
   const handleShare = (feed) => {
@@ -95,7 +110,7 @@ export default function Feed() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-8">
+    <div className="max-w-3xl mx-auto px-2 py-8">
       <div className="space-y-6">
         {feeds.map((feed) => (
           <FeedItem
@@ -103,7 +118,7 @@ export default function Feed() {
             feed={feed}
             user={user}
             onDelete={() => handleDeleteClick(feed)}
-            onEdit={handleEdit}
+            onEdit={() => handleEdit(feed)}
             onShare={handleShare}
           />
         ))}
@@ -117,6 +132,16 @@ export default function Feed() {
         }}
         onConfirm={() => handleDelete(feedToDelete?.id)}
         feedTitle={feedToDelete?.title}
+      />
+
+      <EditFeedModal
+        isOpen={editModalOpen}
+        onClose={() => {
+          setEditModalOpen(false);
+          setFeedToEdit(null);
+        }}
+        onSave={handleEditSave}
+        feed={feedToEdit}
       />
     </div>
   );
