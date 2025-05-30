@@ -23,7 +23,9 @@ const dashboardController = new DashboardController();
 
 // Middleware
 app.use(cors({
-  origin: ['http://0.0.0.0:3099', 'http://0.0.0.0:3098', 'http://127.0.0.1:3099', 'http://188.166.232.67:3099', 'http://localhost:3096', 'http://localhost:3097'],
+  origin: ['http://0.0.0.0:3099', 'http://0.0.0.0:3098', 'http://127.0.0.1:3099', 'http://188.166.232.67:3099', 'http://localhost:3096', 'http://localhost:3097',
+    'http://192.168.102:3097',
+  ],
   // origin: '*',
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],

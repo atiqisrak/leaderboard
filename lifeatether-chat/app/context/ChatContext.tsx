@@ -1,120 +1,164 @@
 "use client";
-import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
-import { initializeSocket, joinRoom, sendMessage as socketSendMessage, onMessage, onTyping, disconnectSocket } from "../../lib/socket";
-
-interface Message {
-  from: "me" | "them";
-  text: string;
-  time: string;
-  userId: string;
-}
-
-interface SocketMessage {
-  roomId: string;
-  message: string;
-  userId: string;
-  timestamp: string;
-}
-
-interface TypingStatus {
-  userId: string;
-  isTyping: boolean;
-}
+import { createContext, useContext, useEffect, useState } from 'react';
+import { io, Socket } from 'socket.io-client';
 
 interface ChatContextType {
-  selectedChat: string | null;
-  selectChat: (id: string) => void;
-  messages: Record<string, Message[]>;
-  sendMessage: (chatId: string, message: Message) => void;
-  isTyping: Record<string, boolean>;
-  isSocketReady: boolean;
+  socket: Socket | null;
+  currentRoom: string | null;
+  messages: Message[];
+  isLoading: boolean;
+  error: string | null;
+  sendMessage: (message: string) => void;
+  joinRoom: (roomId: string) => void;
+  leaveRoom: () => void;
+}
+
+interface Message {
+  id: number;
+  userId: string;
+  message: string;
+  timestamp: string;
 }
 
 const ChatContext = createContext<ChatContextType | null>(null);
 
-export function useChat() {
-  return useContext(ChatContext);
-}
+export function ChatProvider({ children }: { children: React.ReactNode }) {
+  const [socket, setSocket] = useState<Socket | null>(null);
+  const [currentRoom, setCurrentRoom] = useState<string | null>(null);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-export function ChatProvider({ children }: { children: ReactNode }) {
-  const [selectedChat, setSelectedChat] = useState<string | null>(null);
-  const [messages, setMessages] = useState<Record<string, Message[]>>({});
-  const [isTyping, setIsTyping] = useState<Record<string, boolean>>({});
-  const [isSocketReady, setIsSocketReady] = useState(false);
-
-  // Initialize socket and set up listeners
+  // Initialize socket connection
   useEffect(() => {
-    const initializeSocketAndListeners = async () => {
-      const token = localStorage.getItem('token');
-      const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setError('No authentication token found. Please log in.');
+      return;
+    }
 
-      if (!token || !user.id) {
-        return;
+    // Initialize socket connection with authentication
+    const newSocket = io('http://localhost:3096', {
+      auth: {
+        token: `Bearer ${token}` // Add Bearer prefix
+      },
+      transports: ['websocket', 'polling'], // Allow both WebSocket and polling
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
+      timeout: 10000, // Increase timeout to 10 seconds
+    });
+
+    newSocket.on('connect', () => {
+      console.log('Connected to chat server');
+      setError(null);
+    });
+
+    newSocket.on('connect_error', (error) => {
+      console.error('Socket connection error:', error);
+      if (error.message.includes('authentication')) {
+        setError('Authentication failed. Please log in again.');
+      } else {
+        setError('Failed to connect to chat server. Please try again.');
       }
+    });
 
-      try {
-        initializeSocket(user.id);
-        setIsSocketReady(true);
-
-        // Set up message listener
-        onMessage((message: SocketMessage) => {
-          setMessages((prev) => ({
-            ...prev,
-            [message.roomId]: [
-              ...(prev[message.roomId] || []),
-              {
-                from: "them",
-                text: message.message,
-                time: new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                userId: message.userId
-              }
-            ]
-          }));
-        });
-
-        // Set up typing listener
-        onTyping(({ userId, isTyping }: TypingStatus) => {
-          setIsTyping((prev) => ({
-            ...prev,
-            [userId]: isTyping
-          }));
-        });
-      } catch (error) {
-        console.error('Socket initialization failed:', error);
-        setIsSocketReady(false);
+    newSocket.on('disconnect', (reason) => {
+      console.log('Disconnected:', reason);
+      if (reason === 'io server disconnect') {
+        // Server initiated disconnect, try to reconnect
+        newSocket.connect();
       }
-    };
+    });
 
-    initializeSocketAndListeners();
+    newSocket.on('receive_message', (message: Message) => {
+      setMessages(prev => [...prev, message]);
+    });
+
+    setSocket(newSocket);
 
     return () => {
-      disconnectSocket();
-      setIsSocketReady(false);
+      if (newSocket.connected) {
+        newSocket.disconnect();
+      }
     };
   }, []);
 
-  const selectChat = (id: string) => {
-    if (!isSocketReady) return;
-    setSelectedChat(id);
-    joinRoom(id);
+  const joinRoom = async (roomId: string) => {
+    if (!socket || roomId === currentRoom) return;
+    
+    setIsLoading(true);
+    setError(null);
+    try {
+      // Leave current room if any
+      if (currentRoom) {
+        socket.emit('leave_room', currentRoom);
+      }
+
+      // Join new room
+      socket.emit('join_room', roomId);
+      setCurrentRoom(roomId);
+      setMessages([]); // Clear messages when changing rooms
+
+      // Fetch message history
+      const token = localStorage.getItem('token');
+      const res = await fetch(`http://localhost:3096/api/rooms/${roomId}/messages`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (!res.ok) {
+        if (res.status === 401) {
+          throw new Error('Authentication failed. Please log in again.');
+        }
+        throw new Error('Failed to fetch messages');
+      }
+      
+      const data = await res.json();
+      setMessages(data);
+    } catch (error) {
+      console.error('Error joining room:', error);
+      setError(error instanceof Error ? error.message : 'Failed to load messages');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const sendMessage = (chatId: string, message: Message) => {
-    if (!isSocketReady) return;
-    
-    // Add message to local state
-    setMessages((prev) => ({
-      ...prev,
-      [chatId]: [...(prev[chatId] || []), message],
-    }));
+  const leaveRoom = () => {
+    if (!socket || !currentRoom) return;
+    socket.emit('leave_room', currentRoom);
+    setCurrentRoom(null);
+    setMessages([]);
+  };
 
-    // Send message through socket
-    socketSendMessage(chatId, message.text, message.userId);
+  const sendMessage = (message: string) => {
+    if (!socket || !currentRoom) {
+      setError('Not connected to chat server');
+      return;
+    }
+    socket.emit('send_message', {
+      roomId: currentRoom,
+      message
+    });
   };
 
   return (
-    <ChatContext.Provider value={{ selectedChat, selectChat, messages, sendMessage, isTyping, isSocketReady }}>
+    <ChatContext.Provider value={{
+      socket,
+      currentRoom,
+      messages,
+      isLoading,
+      error,
+      sendMessage,
+      joinRoom,
+      leaveRoom
+    }}>
       {children}
     </ChatContext.Provider>
   );
+}
+
+export function useChat() {
+  return useContext(ChatContext);
 }
