@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useChat } from "./context/ChatContext";
+import { useEffect } from "react";
 
 const chats = [
   { id: "1", name: "Shawn Jones", last: "I love them! 🔥", time: "09:38 AM", avatar: "/avatars/1.png" },
@@ -26,6 +27,16 @@ export default function ChatListPage() {
   const chatContext = useChat();
   if (!chatContext) return null;
 
+  // Check authentication
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+    if (!token || !user.id) {
+      router.push('/login');
+    }
+  }, [router]);
+
   return (
     <div className="min-h-screen bg-[var(--background)] text-[var(--text-color)] flex flex-col items-center py-10">
       <h1 className="text-2xl font-bold mb-6">Hello User 👋</h1>
@@ -43,7 +54,10 @@ export default function ChatListPage() {
               router.push(`/chats/${chat.id}`);
             }}
           >
-            <img src={chat.avatar} alt={chat.name} className="w-10 h-10 rounded-full" />
+            <div className="relative">
+              <img src={chat.avatar} alt={chat.name} className="w-10 h-10 rounded-full" />
+              <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-[var(--card-bg)]"></div>
+            </div>
             <div className="flex-1">
               <div className="font-semibold">{chat.name}</div>
               <div className="text-sm text-[var(--light-text)]">{chat.last}</div>

@@ -1,0 +1,101 @@
+import { Server } from 'socket.io';
+import { createAdapter } from '@socket.io/redis-adapter';
+import redis from './index';
+import { createClient } from 'redis';
+import jwt from 'jsonwebtoken';
+import { config } from './config/config';
+
+interface SocketOptions {
+  cors: {
+    origin: string | string[];
+    methods: string[];
+    credentials: boolean;
+  };
+}
+
+export async function setupSocketIO(httpServer: any, options?: SocketOptions) {
+  const io = new Server(httpServer, {
+    cors: options?.cors || {
+      origin: process.env.CLIENT_URL || ['http://localhost:3000', 'http://localhost:3096', 'http://localhost:3097'],
+      methods: ['GET', 'POST'],
+      credentials: true
+    }
+  });
+
+  // Create Redis pub/sub clients
+  const pubClient = createClient({
+    url: `redis://${redis.options.host}:${redis.options.port}`,
+    password: redis.options.password
+  });
+  const subClient = pubClient.duplicate();
+
+  // Connect Redis clients
+  await Promise.all([pubClient.connect(), subClient.connect()]);
+
+  // Set up Redis adapter
+  io.adapter(createAdapter(pubClient, subClient));
+
+  // Socket.IO connection handling with authentication
+  io.use(async (socket, next) => {
+    try {
+      const token = socket.handshake.auth.token;
+      if (!token) {
+        return next(new Error('Authentication token required'));
+      }
+
+      // Verify JWT token
+      const decoded = jwt.verify(token, config.jwt.secret as string) as { id: string };
+      socket.data.userId = decoded.id;
+      next();
+    } catch (error) {
+      next(new Error('Invalid token'));
+    }
+  });
+
+  io.on('connection', (socket) => {
+    const userId = socket.data.userId;
+    console.log('User connected:', socket.id, 'UserId:', userId);
+
+    // Handle user joining a room
+    socket.on('join_room', (roomId: string) => {
+      socket.join(roomId);
+      console.log(`User ${userId} joined room: ${roomId}`);
+    });
+
+    // Handle chat messages
+    socket.on('send_message', async (data: { roomId: string; message: string }) => {
+      const { roomId, message } = data;
+      
+      // Store message in Redis
+      const messageKey = `chat:${roomId}:messages`;
+      const messageData = {
+        id: Date.now(),
+        userId,
+        message,
+        timestamp: new Date().toISOString()
+      };
+      
+      await redis.lpush(messageKey, JSON.stringify(messageData));
+      // Keep only last 100 messages
+      await redis.ltrim(messageKey, 0, 99);
+
+      // Broadcast message to room
+      io.to(roomId).emit('receive_message', messageData);
+    });
+
+    // Handle user typing status
+    socket.on('typing', (data: { roomId: string; isTyping: boolean }) => {
+      socket.to(data.roomId).emit('user_typing', {
+        userId,
+        isTyping: data.isTyping
+      });
+    });
+
+    // Handle disconnection
+    socket.on('disconnect', () => {
+      console.log('User disconnected:', socket.id, 'UserId:', userId);
+    });
+  });
+
+  return io;
+} 

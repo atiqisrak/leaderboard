@@ -1,0 +1,36 @@
+import jwt from 'jsonwebtoken';
+import { Request, Response } from 'express';
+import axios from 'axios';
+
+const ENGINE_URL = process.env.ENGINE_URL || 'http://localhost:3098';
+const JWT_SECRET = process.env.JWT_SECRET || 'adygkubj4w4r7y8h';
+
+export const login = async (req: Request, res: Response) => {
+  try {
+    const { email, password } = req.body;
+
+    // Forward login request to the engine
+    const response = await axios.post(`${ENGINE_URL}/api/v1/users/login`, {
+      email,
+      password
+    });
+
+    // Return the engine's response (which includes the JWT token)
+    res.json(response.data);
+  } catch (error: any) {
+    if (error.response) {
+      // Forward the engine's error response
+      res.status(error.response.status).json(error.response.data);
+    } else {
+      res.status(500).json({ error: 'Failed to connect to authentication service' });
+    }
+  }
+};
+
+export const verifyToken = (token: string) => {
+  try {
+    return jwt.verify(token, JWT_SECRET);
+  } catch (error) {
+    return null;
+  }
+}; 

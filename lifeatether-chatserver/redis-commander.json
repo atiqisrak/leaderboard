@@ -1,0 +1,16 @@
+{
+    "connections": [
+        {
+            "label": "LifeAtEther Redis",
+            "host": "188.166.232.67",
+            "port": 6379,
+            "password": "Niloy@Niil9",
+            "dbIndex": 0
+        }
+    ],
+    "httpAuth": {
+        "username": "admin",
+        "password": "ethertech"
+    },
+    "port": 8081
+}
