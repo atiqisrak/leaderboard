@@ -1,5 +1,5 @@
-import express from 'express';
 import { createServer } from 'http';
+import express from 'express';
 import cors from 'cors';
 import { setupSocketIO } from './socket';
 import { ChatRedisService } from './redis-chat';
@@ -56,8 +56,8 @@ app.get('/api/rooms/:roomId/messages', async (req, res) => {
 setupSocketIO(httpServer, {
   cors: {
     origin: process.env.CLIENT_URL || ['http://localhost:3000', 'http://localhost:3096', 'http://localhost:3097'],
-    methods: ['GET', 'POST'],
-    credentials: true
+    methods: ['GET', 'POST', 'OPTIONS'],
+    credentials: true,
   }
 }).then(() => {
   console.log('Socket.IO initialized');

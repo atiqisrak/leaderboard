@@ -34,6 +34,9 @@ export class UserController {
       const options: SignOptions = { expiresIn: config.jwt.expiresIn as jwt.SignOptions['expiresIn'] };
       const token = jwt.sign({ id: user.id }, config.jwt.secret as Secret, options);
       
+      console.log('Debug - Generated token:', token);
+      console.log('Debug - User data:', user);
+      
       // Set cookie with appropriate options
       res.cookie('token', token, {
         httpOnly: true,
@@ -61,6 +64,33 @@ export class UserController {
         return;
       }
       res.json(user);
+    } catch (error: any) {
+      res.status(400).json({ error: error.message });
+    }
+  };
+
+  getUserById = async (req: Request, res: Response) => {
+    try {
+      const userId = Number(req.params.id);
+      if (isNaN(userId)) {
+        res.status(400).json({ error: 'Invalid user ID' });
+        return;
+      }
+
+      const user = await this.userService.findById(userId);
+      if (!user) {
+        res.status(404).json({ error: 'User not found' });
+        return;
+      }
+
+      // Only return necessary user information
+      const userInfo = {
+        id: user.id,
+        name: user.name,
+        avatar: user.avatar
+      };
+
+      res.json(userInfo);
     } catch (error: any) {
       res.status(400).json({ error: error.message });
     }

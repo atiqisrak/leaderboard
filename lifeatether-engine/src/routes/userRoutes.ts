@@ -28,5 +28,6 @@ router.get('/all-names', userController.getAllUserNames);
 router.get('/profile', authMiddleware, userController.getProfile);
 router.put('/profile', authMiddleware, userController.updateProfile);
 router.get('/search', authMiddleware, userController.searchUsers);
+router.get('/:id', authMiddleware, userController.getUserById);
 
 export default router; 

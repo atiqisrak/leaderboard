@@ -17,9 +17,18 @@ export async function setupSocketIO(httpServer: any, options?: SocketOptions) {
   const io = new Server(httpServer, {
     cors: options?.cors || {
       origin: process.env.CLIENT_URL || ['http://localhost:3000', 'http://localhost:3096', 'http://localhost:3097'],
-      methods: ['GET', 'POST'],
-      credentials: true
-    }
+      methods: ['GET', 'POST', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'Authorization'],
+      credentials: true,
+      preflightContinue: false,
+      optionsSuccessStatus: 204
+    },
+    transports: ['websocket', 'polling'],
+    allowEIO3: true,
+    pingTimeout: 60000,
+    pingInterval: 25000,
+    connectTimeout: 45000,
+    upgradeTimeout: 30000
   });
 
   // Create Redis pub/sub clients
@@ -38,16 +47,22 @@ export async function setupSocketIO(httpServer: any, options?: SocketOptions) {
   // Socket.IO connection handling with authentication
   io.use(async (socket, next) => {
     try {
-      const token = socket.handshake.auth.token;
+      let token = socket.handshake.auth.token;
+      console.log('Debug - Received token:', token);
       if (!token) {
         return next(new Error('Authentication token required'));
       }
-
-      // Verify JWT token
+      // Remove Bearer prefix if present
+      if (token.startsWith('Bearer ')) {
+        token = token.slice(7);
+      }
+      console.log('Debug - Token after processing:', token);
       const decoded = jwt.verify(token, config.jwt.secret as string) as { id: string };
+      console.log('Debug - Decoded token:', decoded);
       socket.data.userId = decoded.id;
       next();
     } catch (error) {
+      console.error('Debug - Token verification error:', error);
       next(new Error('Invalid token'));
     }
   });

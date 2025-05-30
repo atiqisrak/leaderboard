@@ -1,9 +1,9 @@
 import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
 import axios from 'axios';
+import { config } from './config/config';
 
 const ENGINE_URL = process.env.ENGINE_URL || 'http://localhost:3098';
-const JWT_SECRET = process.env.JWT_SECRET || 'adygkubj4w4r7y8h';
 
 export const login = async (req: Request, res: Response) => {
   try {
@@ -29,7 +29,7 @@ export const login = async (req: Request, res: Response) => {
 
 export const verifyToken = (token: string) => {
   try {
-    return jwt.verify(token, JWT_SECRET);
+    return jwt.verify(token, config.jwt.secret as string);
   } catch (error) {
     return null;
   }

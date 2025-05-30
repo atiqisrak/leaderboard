@@ -2,6 +2,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
+const ENGINE_URL = process.env.NEXT_PUBLIC_ENGINE_URL || 'http://localhost:3098';
+
 interface User {
   id: number;
   name: string;
@@ -21,7 +23,7 @@ export default function UserList() {
           return;
         }
 
-        const res = await fetch('http://localhost:3098/api/v1/users/all-names', {
+        const res = await fetch(`${ENGINE_URL}/api/v1/users/all-names`, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
@@ -54,7 +56,7 @@ export default function UserList() {
   }
 
   return (
-    <div className="w-80 bg-[var(--card-bg)] rounded-2xl shadow-lg">
+    <div className="w-full bg-[var(--card-bg)] rounded-2xl shadow-lg">
       <h2 className="text-xl font-semibold p-4 border-b border-[var(--section-bg)]">
         Users
       </h2>
