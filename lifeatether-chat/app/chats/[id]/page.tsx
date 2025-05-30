@@ -19,7 +19,7 @@ export default function ChatPage({ params }: { params: { id: string } }) {
   
   if (!chatContext) return null;
 
-  const { messages, sendMessage, joinRoom, leaveRoom, isLoading, error: chatError } = chatContext;
+  const { messages, sendMessage, joinRoom, leaveRoom, isLoading, error: chatError, isSocketConnected } = chatContext;
 
   useEffect(() => {
     // Get current user info from localStorage
@@ -67,38 +67,75 @@ export default function ChatPage({ params }: { params: { id: string } }) {
 
     // Generate consistent room ID
     const generateRoomId = (userId1: string, userId2: string) => {
+      console.log('Debug - Generating room ID with params:', { userId1, userId2, urlId: params.id });
+      
       // Extract numeric IDs from the strings
       const id1 = parseInt(userId1.replace(/\D/g, ''));
-      const id2 = parseInt(userId2.replace(/\D/g, ''));
+      let id2: number;
+      
+      // Handle both URL formats: chat_20 and chat_1_20
+      if (params.id.startsWith('chat_')) {
+        const parts = params.id.split('_');
+        console.log('Debug - URL parts:', parts);
+        if (parts.length === 2) {
+          // Format: chat_20
+          id2 = parseInt(parts[1]);
+          console.log('Debug - Using format chat_20, extracted id2:', id2);
+        } else if (parts.length === 3) {
+          // Format: chat_1_20
+          id2 = parseInt(parts[2]);
+          console.log('Debug - Using format chat_1_20, extracted id2:', id2);
+        } else {
+          console.error('Debug - Invalid room ID format:', params.id);
+          return null;
+        }
+      } else {
+        // Direct user ID format
+        id2 = parseInt(userId2.replace(/\D/g, ''));
+        console.log('Debug - Using direct user ID format, extracted id2:', id2);
+      }
       
       if (isNaN(id1) || isNaN(id2)) {
-        console.error('Invalid user IDs:', { userId1, userId2, id1, id2 });
+        console.error('Debug - Invalid user IDs:', { userId1, userId2, id1, id2 });
         return null;
       }
 
       // Sort user IDs to ensure consistent room ID regardless of who initiates
       const [smallerId, largerId] = [id1, id2].sort((a, b) => a - b);
       const roomId = `chat_${smallerId}_${largerId}`;
-      console.log('Generated room ID:', roomId, 'from user IDs:', { id1, id2 });
+      console.log('Debug - Generated room ID:', roomId, 'from user IDs:', { id1, id2 });
       return roomId;
     };
 
-    if (currentUserId) {
+    const joinRoomIfReady = async () => {
+      if (!currentUserId) {
+        console.log('Debug - No current user ID available');
+        return;
+      }
+
+      if (!isSocketConnected) {
+        console.log('Debug - Socket not connected yet, waiting...');
+        return;
+      }
+
+      console.log('Debug - Current user ID:', currentUserId);
       const roomId = generateRoomId(currentUserId, params.id);
       if (roomId) {
-        console.log('Joining room:', roomId);
-        joinRoom(roomId);
+        console.log('Debug - Joining room:', roomId);
+        await joinRoom(roomId);
       } else {
-        console.error('Failed to generate room ID');
+        console.error('Debug - Failed to generate room ID');
         setPageError('Invalid user ID');
       }
-    }
+    };
+
+    joinRoomIfReady();
 
     // Leave the room when the component unmounts
     return () => {
       leaveRoom();
     };
-  }, [params.id, currentUserId]);
+  }, [params.id, currentUserId, isSocketConnected]);
 
   // Scroll to bottom when new messages arrive
   useEffect(() => {
