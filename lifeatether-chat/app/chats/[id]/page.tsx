@@ -3,6 +3,8 @@ import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useChat } from '../../context/ChatContext';
 
+const ENGINE_URL = process.env.NEXT_PUBLIC_ENGINE_URL || 'http://localhost:3098';
+
 interface User {
   id: number;
   name: string;
@@ -39,12 +41,13 @@ export default function ChatPage({ params }: { params: { id: string } }) {
         }
 
         // Extract numeric ID from the params.id
-        const receiverId = params.id.replace(/\D/g, '');
+        const parts = params.id.split('_');
+        const receiverId = parts[parts.length - 1]; // Get the last part which is the receiver's ID
         if (!receiverId) {
           throw new Error('Invalid user ID');
         }
 
-        const response = await fetch(`http://localhost:3098/api/v1/users/${receiverId}`, {
+        const response = await fetch(`${ENGINE_URL}/api/v1/users/${receiverId}`, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'

@@ -1,9 +1,15 @@
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Request, Response } from 'express';
 import axios from 'axios';
 import { config } from './config/config';
 
 const ENGINE_URL = process.env.ENGINE_URL || 'http://localhost:3098';
+
+interface UserPayload extends JwtPayload {
+  id: string;
+  email?: string;
+  [key: string]: any;
+}
 
 export const login = async (req: Request, res: Response) => {
   try {
@@ -27,9 +33,9 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 
-export const verifyToken = (token: string) => {
+export const verifyToken = (token: string): UserPayload | null => {
   try {
-    return jwt.verify(token, config.jwt.secret as string);
+    return jwt.verify(token, config.jwt.secret as string) as UserPayload;
   } catch (error) {
     return null;
   }

@@ -4,6 +4,7 @@ import redis from './index';
 import { createClient } from 'redis';
 import jwt from 'jsonwebtoken';
 import { config } from './config/config';
+import { ChatRedisService, ChatMessage } from './redis-chat';
 
 interface SocketOptions {
   cors: {
@@ -81,18 +82,16 @@ export async function setupSocketIO(httpServer: any, options?: SocketOptions) {
     socket.on('send_message', async (data: { roomId: string; message: string }) => {
       const { roomId, message } = data;
       
-      // Store message in Redis
-      const messageKey = `chat:${roomId}:messages`;
-      const messageData = {
+      // Create message object
+      const messageData: ChatMessage = {
         id: Date.now(),
         userId,
         message,
         timestamp: new Date().toISOString()
       };
       
-      await redis.lpush(messageKey, JSON.stringify(messageData));
-      // Keep only last 100 messages
-      await redis.ltrim(messageKey, 0, 99);
+      // Store message and update chat lists
+      await ChatRedisService.addMessage(roomId, messageData);
 
       // Broadcast message to room
       io.to(roomId).emit('receive_message', messageData);
