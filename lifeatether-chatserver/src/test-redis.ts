@@ -1,43 +1,32 @@
-import Redis from 'ioredis';
-import dotenv from 'dotenv';
+import redis from './index';
 
-dotenv.config();
-
-const redis = new Redis(process.env.REDIS_URL || '');
-
-async function testRedisConnection() {
+(async () => {
   try {
-    // Test connection
-    await redis.ping();
-    console.log('✅ Successfully connected to Redis Cloud');
+    console.log('🔄 Attempting to connect to Redis...');
+    console.log('Connection details:', {
+      host: redis.options.host,
+      port: redis.options.port,
+      hasPassword: !!redis.options.password
+    });
 
-    // Test write
-    await redis.set('test-key', 'Hello from LifeAtEther Chat!');
-    console.log('✅ Successfully wrote to Redis');
-
-    // Test read
+    const pong = await redis.ping();
+    console.log('✅ Redis replied:', pong);  // should log "PONG"
+    
+    // Test a simple set/get operation
+    await redis.set('test-key', 'Hello Redis!');
     const value = await redis.get('test-key');
-    console.log('✅ Successfully read from Redis:', value);
-
-    // Test list operations (used in chat)
-    await redis.lpush('test-chat', JSON.stringify({
-      id: Date.now().toString(),
-      message: 'Test message',
-      timestamp: new Date().toISOString()
-    }));
-    console.log('✅ Successfully tested list operations');
-
-    // Clean up test data
-    await redis.del('test-key');
-    await redis.del('test-chat');
-    console.log('✅ Successfully cleaned up test data');
-
-  } catch (error) {
-    console.error('❌ Redis connection test failed:', error);
+    console.log('✅ Test set/get successful:', value);
+    
+  } catch (error: any) {
+    console.error('❌ Redis test failed:', error);
+    console.error('Error details:', {
+      message: error.message,
+      code: error.code,
+      stack: error.stack
+    });
+    process.exit(1);
   } finally {
     await redis.quit();
     console.log('Connection closed');
   }
-}
-
-testRedisConnection(); 
+})();

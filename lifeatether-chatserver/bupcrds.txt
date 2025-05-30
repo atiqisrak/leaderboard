@@ -1,0 +1,43 @@
+# CLIENT_URL=http://localhost:3096
+# REDIS_URL=redis://default:iQtQOm4TWK6AhOygkNIfxVnbg3ufk7wJ@redis-19027.c321.us-east-1-2.ec2.redns.redis-cloud.com:19027
+
+# Development
+# NODE
+NODE_ENV=development
+PORT=3096
+
+# PostgreSQL (your local credentials)
+PG_HOST=188.166.232.67
+PG_PORT=5432
+PG_USER=rango
+PG_PASS=
+PG_DB=lifeatether
+
+# Redis (local)
+REDIS_HOST=188.166.232.67
+REDIS_PORT=6379
+REDIS_PASSWORD=
+
+# Socket.io (optional)
+SOCKET_PATH=/socket.io
+
+
+# # Production
+# # NODE
+# NODE_ENV=production
+# PORT=8080
+
+# # PostgreSQL (prod credentials)
+# PG_HOST=<your-prod-db-host>      # e.g. 127.0.0.1 or private network IP
+# PG_PORT=5432
+# PG_USER=your_prod_db_user
+# PG_PASS=your_prod_db_pass
+# PG_DB=life_at_ether_prod
+
+# # Redis (droplet)
+# REDIS_HOST=127.0.0.1
+# REDIS_PORT=6379
+# REDIS_PASSWORD=
+
+# # Socket.io
+# SOCKET_PATH=/socket.io
