@@ -35,14 +35,20 @@ function isEmojiOnlyMessage(text: string) {
 }
 
 export default function ChatMessage({ message, isCurrentUser }: ChatMessageProps) {
+  const [showTimestamp, setShowTimestamp] = useState(false);
   const isEmojiOnly = isEmojiOnlyMessage(message.message);
+
+  const toggleTimestamp = () => {
+    setShowTimestamp(!showTimestamp);
+  };
 
   return (
     <div
       className={`flex w-full ${isCurrentUser ? 'justify-end' : 'justify-start'}`}
     >
       <div
-        className={`max-w-[70%] rounded-2xl p-3 ${
+        onClick={toggleTimestamp}
+        className={`max-w-[70%] rounded-2xl p-3 flex items-center gap-2 cursor-pointer ${
           isCurrentUser
             ? isEmojiOnly 
               ? 'bg-transparent'
@@ -53,7 +59,7 @@ export default function ChatMessage({ message, isCurrentUser }: ChatMessageProps
         }`}
       >
           <EmojiConverter text={message.message} />
-        {!isEmojiOnly && (
+        {showTimestamp && (
           <p className={`text-md mt-1 ${
             isCurrentUser
               ? 'text-white/70'

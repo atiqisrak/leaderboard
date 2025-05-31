@@ -6,6 +6,7 @@ import { Message } from '../../context/chat/types';
 import EmojiConverter from '../../components/EmojiConverter';
 import ChatMessage from '../../components/ChatMessage';
 import Image from 'next/image';
+import EmojiBox from '../../components/ui/ImojiBox';
 
 const CHAT_SERVER_URL = process.env.NEXT_PUBLIC_CHAT_SERVER_URL || 'http://localhost:3096';
 const ENGINE_URL = process.env.NEXT_PUBLIC_ENGINE_URL || 'http://localhost:3098';
@@ -16,6 +17,7 @@ export default function ChatWindow({ params }: { params: { roomId: string } }) {
   const [isLoading, setIsLoading] = useState(true);
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
   const [receiverName, setReceiverName] = useState<string>("Receiver");
+  const [isEmojiBoxOpen, setIsEmojiBoxOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -155,6 +157,11 @@ export default function ChatWindow({ params }: { params: { roomId: string } }) {
     setNewMessage('');
   };
 
+  const handleEmojiSelect = (emoji: string) => {
+    setNewMessage(prev => prev + emoji);
+    setIsEmojiBoxOpen(false);
+  };
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -201,7 +208,14 @@ export default function ChatWindow({ params }: { params: { roomId: string } }) {
       {/* Message Input */}
       <form onSubmit={handleSendMessage} className="p-4 bg-[var(--card-bg)]">
         <div className="flex gap-2">
-          <Image src="/icons/smile.svg" alt="Smile" width={30} height={30} className="cursor-pointer" />
+          <Image 
+            src="/icons/smile.svg" 
+            alt="Smile" 
+            width={30} 
+            height={30} 
+            className="cursor-pointer" 
+            onClick={() => setIsEmojiBoxOpen(!isEmojiBoxOpen)}
+          />
           <input
             type="text"
             value={newMessage}
@@ -209,11 +223,23 @@ export default function ChatWindow({ params }: { params: { roomId: string } }) {
             placeholder="Type a message..."
             className="flex-1 p-3 rounded-xl bg-[var(--section-bg)] text-[var(--text-color)] border border-[var(--border-color)] focus:outline-none focus:border-[var(--primary-color)]"
           />
-          <Image src="/icons/send.svg" alt="Send" width={30} height={30} className="cursor-pointer rotate-45"
+          <Image 
+            src="/icons/send.svg" 
+            alt="Send" 
+            width={30} 
+            height={30} 
+            className="cursor-pointer rotate-45"
             onClick={handleSendMessage}
           />
         </div>
       </form>
+
+      {/* Emoji Box */}
+      <EmojiBox
+        isOpen={isEmojiBoxOpen}
+        onClose={() => setIsEmojiBoxOpen(false)}
+        onEmojiSelect={handleEmojiSelect}
+      />
     </div>
   );
 } 
